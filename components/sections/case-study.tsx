@@ -1,7 +1,6 @@
 'use client';
 
 import { TrendingUp, Clock, DollarSign, Users, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { Container } from '@/components/container';
 import { SectionHeading } from '@/components/section-heading';
 import { Reveal, Stagger, StaggerItem } from '@/components/motion';
