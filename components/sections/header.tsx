@@ -67,7 +67,7 @@ export function Header() {
             aria-pressed={theme === 'dark'}
             className="flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
-            {theme === 'dark' ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
           <Button variant="ghost" size="sm" asChild>
             <Link href="#cta">Login</Link>

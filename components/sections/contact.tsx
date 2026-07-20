@@ -299,7 +299,8 @@ export function ContactForm() {
                     <button
                       type="submit"
                       disabled={status === 'submitting'}
-                      className="group/btn inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-sm font-semibold text-white shadow-glow transition-all hover:shadow-premium hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:px-7"
+                      aria-label={status === 'submitting' ? 'Sending your message' : 'Send message'}
+                      className="group/btn inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-sm font-semibold text-white shadow-glow transition-all hover:shadow-premium hover:brightness-110 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:px-7"
                     >
                       {status === 'submitting' ? (
                         <>

@@ -327,7 +327,7 @@ export function Hero() {
 function NotificationCard() {
   const [index, setIndex] = React.useState(0);
   React.useEffect(() => {
-    const id = setInterval(() => setIndex((i) => (i + 1) % notifications.length), 3000);
+    const id = setInterval(() => setIndex((i) => (i + 1) % notifications.length), 4500);
     return () => clearInterval(id);
   }, []);
   const n = notifications[index];

@@ -31,6 +31,7 @@ import { Container } from '@/components/container';
 import { SectionHeading } from '@/components/section-heading';
 import { Reveal, Stagger, StaggerItem } from '@/components/motion';
 import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
 import {
   Accordion,
   AccordionContent,
@@ -302,18 +303,17 @@ export function Pricing() {
                 </div>
 
                 {/* CTA */}
-                <Link
-                  href={plan.ctaHref}
-                  className={cn(
-                    'group/btn mt-6 inline-flex h-11 items-center justify-center rounded-lg px-6 text-sm font-medium transition-all',
-                    plan.highlighted
-                      ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-glow hover:shadow-premium hover:brightness-110'
-                      : 'border border-border bg-background hover:bg-muted hover:border-primary/40'
-                  )}
+                <Button
+                  asChild
+                  variant={plan.highlighted ? 'brand' : 'outline'}
+                  size="lg"
+                  className="group/btn mt-6 w-full"
                 >
-                  {plan.cta}
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                </Link>
+                  <Link href={plan.ctaHref}>
+                    {plan.cta}
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                  </Link>
+                </Button>
 
                 {/* Feature list */}
                 <ul className="mt-7 space-y-3 border-t border-border/60 pt-6">
@@ -476,13 +476,12 @@ export function Pricing() {
                   Get tailored AI automation, dedicated support, custom SLAs, and enterprise-grade security. Our team will design a deployment that fits your organization.
                 </p>
               </div>
-              <Link
-                href="#contact"
-                className="group/btn inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-primary to-secondary px-7 text-sm font-semibold text-white shadow-glow transition-all hover:shadow-premium hover:brightness-110 active:scale-95"
-              >
-                Talk to Sales
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-              </Link>
+              <Button asChild variant="brand" size="lg" className="group/btn shrink-0">
+                <Link href="#contact">
+                  Talk to Sales
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                </Link>
+              </Button>
             </div>
           </div>
         </Reveal>
