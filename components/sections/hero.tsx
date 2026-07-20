@@ -18,8 +18,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Container } from '@/components/container';
-
-const trustedBy = ['Vercel', 'Linear', 'Notion', 'Stripe', 'Framer', 'Loom'];
+import { trustedBy, heroThroughputBars } from '@/data/hero';
 
 const notifications = [
   { icon: Bot, text: 'Agent resolved ticket #4821', color: 'text-emerald-500' },

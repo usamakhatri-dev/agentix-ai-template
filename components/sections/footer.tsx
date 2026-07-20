@@ -2,62 +2,9 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Sparkles, Twitter, Linkedin, Github, Youtube, ArrowRight, Mail, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Sparkles, ArrowRight, Mail, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Container } from '@/components/container';
-
-const columns = [
-  {
-    title: 'Product',
-    links: [
-      { label: 'Features', href: '#features' },
-      { label: 'Solutions', href: '#solutions' },
-      { label: 'Pricing', href: '#pricing' },
-      { label: 'Integrations', href: '#features' },
-      { label: 'Changelog', href: '#' },
-      { label: 'API Docs', href: '/docs' },
-    ],
-  },
-  {
-    title: 'Company',
-    links: [
-      { label: 'About', href: '#' },
-      { label: 'Customers', href: '#testimonials' },
-      { label: 'Careers', href: '#' },
-      { label: 'Blog', href: '#resources' },
-      { label: 'Press', href: '#' },
-      { label: 'Contact', href: '#contact' },
-    ],
-  },
-  {
-    title: 'Resources',
-    links: [
-      { label: 'Documentation', href: '/docs' },
-      { label: 'Guides', href: '#resources' },
-      { label: 'Tutorials', href: '#' },
-      { label: 'Community', href: '#' },
-      { label: 'Webinars', href: '#' },
-      { label: 'Status', href: '/status' },
-    ],
-  },
-  {
-    title: 'Legal',
-    links: [
-      { label: 'Privacy Policy', href: '/privacy' },
-      { label: 'Terms of Service', href: '/terms' },
-      { label: 'Cookie Policy', href: '/cookies' },
-      { label: 'Security', href: '/security' },
-      { label: 'DPA', href: '/dpa' },
-      { label: 'Support', href: '/support' },
-    ],
-  },
-];
-
-const socials = [
-  { icon: Twitter, label: 'Twitter', href: 'https://twitter.com/agentixai' },
-  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/agentixai' },
-  { icon: Github, label: 'GitHub', href: 'https://github.com/agentixai' },
-  { icon: Youtube, label: 'YouTube', href: 'https://youtube.com/@agentixai' },
-];
+import { footerColumns, socials } from '@/data/navigation';
 
 type Status = 'idle' | 'success' | 'error';
 
@@ -141,7 +88,7 @@ export function Footer() {
           </div>
 
           {/* Link columns */}
-          {columns.map((col) => (
+          {footerColumns.map((col) => (
             <div key={col.title}>
               <h3 className="text-sm font-semibold">{col.title}</h3>
               <ul className="mt-4 space-y-2.5">

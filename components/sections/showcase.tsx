@@ -19,12 +19,7 @@ import { Container } from '@/components/container';
 import { SectionHeading } from '@/components/section-heading';
 import { Reveal } from '@/components/motion';
 import { cn } from '@/lib/utils';
-
-const tabs = [
-  { id: 'workflow', label: 'Workflow Builder', icon: Workflow },
-  { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-  { id: 'activity', label: 'Activity Feed', icon: Activity },
-];
+import { showcaseTabs } from '@/data/showcase';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -46,7 +41,7 @@ export function Showcase() {
 
         <Reveal className="mt-12 flex justify-center">
           <div className="inline-flex items-center gap-1 rounded-xl border border-border/60 bg-card/60 p-1 shadow-soft backdrop-blur-xl">
-            {tabs.map((tab) => (
+            {showcaseTabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActive(tab.id)}

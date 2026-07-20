@@ -1,50 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { ShieldCheck, Lock, ServerCog, BadgeCheck } from 'lucide-react';
+import { useInView } from 'framer-motion';
 import { Container } from '@/components/container';
 import { Reveal } from '@/components/motion';
-
-interface Stat {
-  value: number;
-  suffix: string;
-  prefix?: string;
-  label: string;
-  decimals?: number;
-}
-
-const stats: Stat[] = [
-  { value: 50000, suffix: '+', label: 'Active Users' },
-  { value: 99.9, suffix: '%', label: 'Platform Uptime', decimals: 1 },
-  { value: 120, suffix: '+', label: 'Countries' },
-  { value: 4.9, suffix: '/5', label: 'Average Rating', decimals: 1 },
-];
-
-// Realistic placeholder company wordmarks (replace with real SVG logos later)
-const companyLogos = [
-  'Microsoft',
-  'Stripe',
-  'Shopify',
-  'Notion',
-  'Slack',
-  'HubSpot',
-];
-
-const featuredPress = [
-  'TechCrunch',
-  'Forbes',
-  'Product Hunt',
-  'Hacker News',
-  'AI Weekly',
-];
-
-const trustBadges = [
-  { icon: BadgeCheck, label: 'GDPR Compliant' },
-  { icon: ShieldCheck, label: 'SOC 2 Ready' },
-  { icon: Lock, label: '256-bit SSL Encryption' },
-  { icon: ServerCog, label: '99.9% Uptime' },
-];
+import { stats, companyLogos, featuredPress, trustBadges } from '@/data/stats';
+import type { Stat } from '@/data/stats';
 
 function useCounter(target: number, duration = 2000, decimals = 0) {
   const [count, setCount] = useState(0);

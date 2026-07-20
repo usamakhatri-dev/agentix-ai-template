@@ -6,8 +6,7 @@ import { ArrowRight, CalendarDays, CheckCircle2, Sparkles } from 'lucide-react';
 import { Container } from '@/components/container';
 import { Reveal } from '@/components/motion';
 import { Button } from '@/components/ui/button';
-
-const points = ['14-day free trial', 'No credit card required', 'Setup in under 10 minutes'];
+import { finalCtaPoints } from '@/data/final-cta';
 
 export function FinalCTA() {
   return (
@@ -61,7 +60,7 @@ export function FinalCTA() {
             </div>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-              {points.map((p, i) => (
+              {finalCtaPoints.map((p, i) => (
                 <motion.div
                   key={p}
                   initial={{ opacity: 0, y: 8 }}

@@ -4,13 +4,7 @@ import { TrendingUp, Clock, DollarSign, Users, ArrowRight } from 'lucide-react';
 import { Container } from '@/components/container';
 import { SectionHeading } from '@/components/section-heading';
 import { Reveal, Stagger, StaggerItem } from '@/components/motion';
-
-const results = [
-  { icon: Clock, value: '4,820', label: 'hours saved per quarter', color: 'text-primary' },
-  { icon: DollarSign, value: '$214k', label: 'in operational savings', color: 'text-emerald-500' },
-  { icon: Users, value: '3.2x', label: 'faster customer response', color: 'text-secondary' },
-  { icon: TrendingUp, value: '+34%', label: 'revenue lift in 90 days', color: 'text-accent' },
-];
+import { caseStudyResults } from '@/data/case-study';
 
 export function CaseStudy() {
   return (
@@ -89,7 +83,7 @@ export function CaseStudy() {
                   <div className="text-sm font-semibold">Results at a glance</div>
                   <div className="text-xs text-muted-foreground">90 days after deployment</div>
                   <Stagger className="mt-6 grid grid-cols-2 gap-4">
-                    {results.map((r) => (
+                    {caseStudyResults.map((r) => (
                       <StaggerItem key={r.label}>
                         <div className="group rounded-xl border border-border/60 bg-background/60 p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-soft">
                           <r.icon className={`h-5 w-5 ${r.color}`} />

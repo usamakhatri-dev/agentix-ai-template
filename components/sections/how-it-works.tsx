@@ -1,37 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Plug, Zap, TrendingUp, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Container } from '@/components/container';
 import { SectionHeading } from '@/components/section-heading';
 import { Reveal, Stagger, StaggerItem } from '@/components/motion';
-
-const steps = [
-  {
-    number: '01',
-    icon: Plug,
-    title: 'Connect',
-    description:
-      'Link your tools, data sources, and knowledge base in minutes. Agentix integrates with 200+ apps out of the box — no code, no headaches.',
-    accent: 'from-blue-500 to-cyan-500',
-  },
-  {
-    number: '02',
-    icon: Zap,
-    title: 'Automate',
-    description:
-      'Design workflows visually or let AI build them for you. Deploy agents that reason, act, and learn across every channel your team uses.',
-    accent: 'from-violet-500 to-blue-500',
-  },
-  {
-    number: '03',
-    icon: TrendingUp,
-    title: 'Scale',
-    description:
-      'Monitor performance, optimize costs, and expand automations across departments. Agentix grows with you — from one workflow to thousands.',
-    accent: 'from-cyan-500 to-emerald-500',
-  },
-];
+import { steps } from '@/data/how-it-works';
 
 export function HowItWorks() {
   return (

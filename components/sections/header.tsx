@@ -8,16 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Container } from '@/components/container';
 import { useTheme } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
-
-const navLinks = [
-  { label: 'Features', href: '#features' },
-  { label: 'Solutions', href: '#solutions' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'Resources', href: '#resources' },
-  { label: 'Testimonials', href: '#testimonials' },
-  { label: 'FAQ', href: '#faq' },
-  { label: 'Contact', href: '#contact' },
-];
+import { navLinks } from '@/data/navigation';
 
 export function Header() {
   const [scrolled, setScrolled] = React.useState(false);
