@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter, Sora } from 'next/font/google';
+import { faqs } from '@/data/faq';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -79,6 +80,11 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
     },
   },
+  formatDetection: {
+    telephone: true,
+    address: false,
+    email: true,
+  },
   manifest: '/manifest.webmanifest',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
@@ -139,6 +145,29 @@ const softwareLd = {
   },
 };
 
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Agentix AI',
+  url: siteUrl,
+  publisher: { '@type': 'Organization', name: 'Agentix AI' },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${siteUrl}/?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -160,6 +189,14 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
         />
       </head>
       <body className={`${inter.variable} ${sora.variable} font-sans antialiased`}>

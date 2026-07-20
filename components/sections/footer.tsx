@@ -24,7 +24,7 @@ export function Footer() {
   };
 
   return (
-    <footer id="contact" className="relative border-t border-border/60 bg-card/30">
+    <footer className="relative border-t border-border/60 bg-card/30">
       <Container className="py-16">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-3 lg:grid-cols-6">
           {/* Brand + newsletter */}
@@ -117,6 +117,8 @@ export function Footer() {
                 key={s.label}
                 href={s.href}
                 aria-label={s.label}
+                rel="noopener noreferrer"
+                target="_blank"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 text-muted-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary hover:shadow-soft"
               >
                 <s.icon className="h-4 w-4" />

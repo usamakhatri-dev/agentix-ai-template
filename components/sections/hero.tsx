@@ -302,9 +302,9 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.5 }}
           className="mt-20 w-full"
         >
-          <p className="text-center text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+          <h2 className="text-center text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
             Trusted by fast-growing teams worldwide
-          </p>
+          </h2>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 opacity-70">
             {trustedBy.map((name, i) => (
               <motion.span
