@@ -22,8 +22,16 @@ export function Testimonials() {
       setPerView(w >= 1024 ? 3 : w >= 640 ? 2 : 1);
     };
     update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    let raf = 0;
+    const onResize = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+    window.addEventListener('resize', onResize, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', onResize);
+    };
   }, []);
 
   const maxIndex = Math.max(0, testimonials.length - perView);
