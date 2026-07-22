@@ -1,127 +1,162 @@
-'use client';
+'use client'
 
-import * as React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Container } from '@/components/container';
-import { SectionHeading } from '@/components/section-heading';
-import { Reveal } from '@/components/motion';
-import { testimonials } from '@/data/testimonials';
-import { cn } from '@/lib/utils';
+import { useState, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Container } from '@/components/container'
+import { SectionHeading } from '@/components/section-heading'
+import { Reveal } from '@/components/motion'
+import { testimonials } from '@/data/testimonials'
+import { cn } from '@/lib/utils'
+
+const EASE = [0.22, 1, 0.36, 1] as const
 
 export function Testimonials() {
-  const [perView, setPerView] = React.useState(3);
-  const [start, setStart] = React.useState(0);
+  const [perView, setPerView] = useState(3)
+  const [index, setIndex] = useState(0)
 
-  React.useEffect(() => {
-    const update = () => {
-      const w = window.innerWidth;
-      setPerView(w >= 1024 ? 3 : w >= 640 ? 2 : 1);
-    };
-    update();
-    let raf = 0;
+  useEffect(() => {
+    let frame: number | undefined
     const onResize = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(update);
-    };
-    window.addEventListener('resize', onResize, { passive: true });
+      if (frame) cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const w = window.innerWidth
+        setPerView(w < 640 ? 1 : w < 1024 ? 2 : 3)
+      })
+    }
+    onResize()
+    window.addEventListener('resize', onResize, { passive: true })
     return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener('resize', onResize);
-    };
-  }, []);
+      window.removeEventListener('resize', onResize)
+      if (frame) cancelAnimationFrame(frame)
+    }
+  }, [])
 
-  const maxStart = Math.max(0, testimonials.length - perView);
-  const clampedStart = Math.min(start, maxStart);
-  const visible = testimonials.slice(clampedStart, clampedStart + perView);
+  const maxIndex = Math.max(0, testimonials.length - perView)
+
+  useEffect(() => {
+    if (index > maxIndex) setIndex(maxIndex)
+  }, [maxIndex, index])
+
+  const next = useCallback(() => {
+    setIndex((i) => Math.min(i + 1, maxIndex))
+  }, [maxIndex])
+
+  const prev = useCallback(() => {
+    setIndex((i) => Math.max(i - 1, 0))
+  }, [])
 
   return (
-    <section id="testimonials" className="relative py-24 sm:py-32 bg-muted/20 border-y border-border/60">
+    <section className="py-20 md:py-28">
       <Container>
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-          <SectionHeading
-            eyebrow="Testimonials"
-            title="Loved by teams worldwide"
-            description="Don't take our word for it. Hear from the teams using Agentix to transform their operations."
-          />
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setStart((s) => Math.max(0, s - 1))}
-              disabled={clampedStart === 0}
-              aria-label="Previous testimonials"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border/60 bg-card/50 text-muted-foreground transition-all hover:border-primary/40 hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              onClick={() => setStart((s) => Math.min(maxStart, s + 1))}
-              disabled={clampedStart === maxStart}
-              aria-label="Next testimonials"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border/60 bg-card/50 text-muted-foreground transition-all hover:border-primary/40 hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
+        <SectionHeading
+          eyebrow="Testimonials"
+          title="Loved by teams everywhere"
+          description="Don't just take our word for it. Here's what our customers have to say."
+        />
 
-        <Reveal className="mt-12 overflow-hidden">
-          <div className="grid gap-6" style={{ gridTemplateColumns: `repeat(${perView}, minmax(0, 1fr))` }}>
-            <AnimatePresence mode="wait">
-              {visible.map((t) => (
-                <motion.div
-                  key={t.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.4 }}
-                  className="flex h-full flex-col rounded-2xl border border-border/60 bg-card/50 p-6 shadow-soft backdrop-blur-sm"
-                >
-                  <Quote className="h-8 w-8 text-primary/20" />
-                  <div className="mt-3 flex items-center gap-0.5">
-                    {Array.from({ length: t.rating }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-                  <p className="mt-4 flex-1 text-sm text-foreground/80 leading-relaxed">
-                    &ldquo;{t.quote}&rdquo;
-                  </p>
-                  <div className="mt-6 flex items-center gap-3 border-t border-border/60 pt-4">
-                    {/* eslint-disable-next-line @next/next/no-img-element -- static export uses unoptimized images */}
-                    <img
-                      src={t.avatar}
-                      alt={t.name}
-                      width={40}
-                      height={40}
-                      loading="lazy"
-                      className="h-10 w-10 rounded-full object-cover"
-                    />
-                    <div>
-                      <div className="text-sm font-semibold">{t.name}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {t.role} · {t.company}
+        <Reveal>
+          <div className="mt-12">
+            {/* Controls */}
+            <div className="mb-6 flex items-center justify-end gap-2">
+              <button
+                onClick={prev}
+                disabled={index === 0}
+                aria-label="Previous"
+                className={cn(
+                  'flex h-9 w-9 items-center justify-center rounded-full border border-border transition-colors',
+                  index === 0
+                    ? 'cursor-not-allowed opacity-40'
+                    : 'hover:bg-muted'
+                )}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                onClick={next}
+                disabled={index >= maxIndex}
+                aria-label="Next"
+                className={cn(
+                  'flex h-9 w-9 items-center justify-center rounded-full border border-border transition-colors',
+                  index >= maxIndex
+                    ? 'cursor-not-allowed opacity-40'
+                    : 'hover:bg-muted'
+                )}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Carousel */}
+            <div className="overflow-hidden">
+              <motion.div
+                className="flex"
+                animate={{ x: `-${index * (100 / perView)}%` }}
+                transition={{ duration: 0.5, ease: EASE }}
+              >
+                {testimonials.map((t) => (
+                  <div
+                    key={t.name}
+                    style={{ width: `${100 / perView}%` }}
+                    className="flex-shrink-0 px-3"
+                  >
+                    <div className="flex h-full flex-col rounded-2xl border border-border bg-card p-6">
+                      <Quote className="mb-4 h-8 w-8 text-primary/30" />
+                      <div className="mb-4 flex gap-0.5">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className={cn(
+                              'h-4 w-4',
+                              i < t.rating
+                                ? 'fill-yellow-400 text-yellow-400'
+                                : 'text-muted'
+                            )}
+                          />
+                        ))}
+                      </div>
+                      <p className="flex-1 text-sm leading-relaxed text-muted-foreground">
+                        &ldquo;{t.quote}&rdquo;
+                      </p>
+                      <div className="mt-6 flex items-center gap-3 border-t border-border pt-4">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={t.avatar}
+                          alt={t.name}
+                          className="h-10 w-10 rounded-full object-cover"
+                        />
+                        <div>
+                          <p className="text-sm font-semibold">{t.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {t.role} · {t.company}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Dots */}
+            <div className="mt-6 flex justify-center gap-1.5">
+              {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setIndex(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                  className={cn(
+                    'h-1.5 rounded-full transition-all',
+                    i === index
+                      ? 'w-6 bg-primary'
+                      : 'w-1.5 bg-muted hover:bg-muted-foreground/50'
+                  )}
+                />
               ))}
-            </AnimatePresence>
+            </div>
           </div>
         </Reveal>
-
-        <div className="mt-8 flex items-center justify-center gap-2">
-          {Array.from({ length: maxStart + 1 }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setStart(i)}
-              aria-label={`Go to slide ${i + 1}`}
-              className={cn(
-                'h-2 rounded-full transition-all',
-                i === clampedStart ? 'w-8 bg-primary' : 'w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50',
-              )}
-            />
-          ))}
-        </div>
       </Container>
     </section>
-  );
+  )
 }

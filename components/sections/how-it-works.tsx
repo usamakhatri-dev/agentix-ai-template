@@ -1,72 +1,88 @@
-'use client';
+'use client'
 
-import { motion } from 'framer-motion';
-import { MousePointerClick, Workflow, Rocket, BarChart3 } from 'lucide-react';
-import { Container } from '@/components/container';
-import { SectionHeading } from '@/components/section-heading';
-import { Reveal } from '@/components/motion';
+import { motion } from 'framer-motion'
+import {
+  MousePointerClick,
+  Workflow,
+  Rocket,
+  BarChart3,
+  type LucideIcon,
+} from 'lucide-react'
+import { Container } from '@/components/container'
+import { SectionHeading } from '@/components/section-heading'
+import { Reveal } from '@/components/motion'
 
-const steps = [
+const EASE = [0.22, 1, 0.36, 1] as const
+
+const steps: {
+  icon: LucideIcon
+  title: string
+  description: string
+}[] = [
   {
     icon: MousePointerClick,
     title: 'Connect your tools',
-    description: 'Link Slack, Salesforce, HubSpot, and 200+ integrations in minutes. No code required.',
+    description:
+      'Link your existing stack — CRM, helpdesk, database, and more — with one-click integrations. No code required.',
   },
   {
     icon: Workflow,
-    title: 'Design workflows',
-    description: 'Build visual workflows with drag-and-drop simplicity. Trigger on events or schedule runs.',
+    title: 'Design your workflow',
+    description:
+      'Drag and drop triggers, conditions, and actions into a visual canvas. Build complex logic in minutes.',
   },
   {
     icon: Rocket,
-    title: 'Deploy AI agents',
-    description: 'Launch autonomous agents that handle tasks end-to-end with contextual memory.',
+    title: 'Deploy your agents',
+    description:
+      'Launch AI agents that handle tasks autonomously. They learn from every interaction and improve over time.',
   },
   {
     icon: BarChart3,
-    title: 'Monitor & optimize',
-    description: 'Track performance with real-time dashboards. Continuously improve with A/B testing.',
+    title: 'Measure & optimize',
+    description:
+      'Track performance with real-time analytics. Spot bottlenecks and iterate with confidence.',
   },
-];
+]
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="relative py-24 sm:py-32 bg-muted/20 border-y border-border/60">
+    <section className="border-y border-border bg-muted/20 py-20 md:py-28">
       <Container>
         <SectionHeading
-          align="center"
-          eyebrow="How It Works"
-          title="From setup to scale in four steps"
-          description="Get up and running in minutes, not months. Agentix makes AI automation accessible to every team."
+          eyebrow="How it works"
+          title="From idea to automation in four steps"
+          description="No engineering team required. Go from setup to deployment in an afternoon."
         />
 
-        <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, i) => (
-            <Reveal key={step.title} delay={i * 0.08}>
-              <div className="relative h-full rounded-2xl border border-border/60 bg-card/50 p-6 shadow-soft backdrop-blur-sm">
-                <div className="absolute -top-3 left-6 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-xs font-bold text-white shadow-glow">
+            <Reveal key={step.title} delay={i * 0.1}>
+              <motion.div
+                whileHover={{ y: -6 }}
+                transition={{ duration: 0.3, ease: EASE }}
+                className="relative h-full rounded-2xl border border-border bg-card p-6"
+              >
+                <span className="absolute right-5 top-5 text-5xl font-bold text-muted/30">
                   {i + 1}
-                </div>
-                <div className="mt-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                </span>
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <step.icon className="h-5 w-5" />
                 </div>
-                <h3 className="mt-4 font-display text-base font-semibold tracking-tight">
-                  {step.title}
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                <h3 className="mb-2 text-lg font-semibold">{step.title}</h3>
+                <p className="text-sm text-muted-foreground">
                   {step.description}
                 </p>
                 {i < steps.length - 1 && (
-                  <motion.div
-                    aria-hidden
-                    className="hidden lg:block absolute top-1/2 -right-3 h-px w-6 bg-border"
-                  />
+                  <div className="absolute -right-3 top-1/2 hidden -translate-y-1/2 lg:block">
+                    <div className="h-px w-6 bg-border" />
+                  </div>
                 )}
-              </div>
+              </motion.div>
             </Reveal>
           ))}
         </div>
       </Container>
     </section>
-  );
+  )
 }

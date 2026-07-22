@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Bot,
   Zap,
@@ -8,11 +6,11 @@ import {
   BarChart3,
   ShieldCheck,
   type LucideIcon,
-} from 'lucide-react';
-import { Container } from '@/components/container';
-import { SectionHeading } from '@/components/section-heading';
-import { Stagger, StaggerItem } from '@/components/motion';
-import { features } from '@/data/features';
+} from 'lucide-react'
+import { Container } from '@/components/container'
+import { SectionHeading } from '@/components/section-heading'
+import { Stagger, StaggerItem } from '@/components/motion'
+import { features } from '@/data/features'
 
 const iconMap: Record<string, LucideIcon> = {
   Bot,
@@ -21,40 +19,37 @@ const iconMap: Record<string, LucideIcon> = {
   Plug,
   BarChart3,
   ShieldCheck,
-};
+}
 
 export function Features() {
   return (
-    <section id="features" className="relative py-24 sm:py-32">
+    <section className="py-20 md:py-28">
       <Container>
         <SectionHeading
-          align="center"
           eyebrow="Features"
-          title="Everything you need to automate with AI"
-          description="From autonomous agents to real-time analytics, Agentix gives your team the tools to build, deploy, and scale AI automation without a line of code."
+          title="Everything you need to automate at scale"
+          description="A complete platform for building, deploying, and monitoring AI agents and workflows — without the engineering overhead."
         />
 
         <Stagger className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => {
-            const Icon = iconMap[feature.icon] ?? Bot;
+            const Icon = iconMap[feature.icon] ?? Bot
             return (
               <StaggerItem key={feature.title}>
-                <div className="group relative h-full rounded-2xl border border-border/60 bg-card/50 p-6 shadow-soft backdrop-blur-sm transition-all hover:border-primary/40 hover:shadow-premium">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
-                    <Icon className="h-6 w-6" />
+                <div className="group h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110">
+                    <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="mt-5 font-display text-lg font-semibold tracking-tight">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                  <h3 className="mb-2 text-lg font-semibold">{feature.title}</h3>
+                  <p className="text-sm text-muted-foreground">
                     {feature.description}
                   </p>
                 </div>
               </StaggerItem>
-            );
+            )
           })}
         </Stagger>
       </Container>
     </section>
-  );
+  )
 }

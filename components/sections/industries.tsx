@@ -1,5 +1,3 @@
-'use client';
-
 import {
   ShoppingBag,
   HeartPulse,
@@ -8,51 +6,80 @@ import {
   Factory,
   Banknote,
   type LucideIcon,
-} from 'lucide-react';
-import { Container } from '@/components/container';
-import { SectionHeading } from '@/components/section-heading';
-import { Stagger, StaggerItem } from '@/components/motion';
+} from 'lucide-react'
+import { Container } from '@/components/container'
+import { SectionHeading } from '@/components/section-heading'
+import { Stagger, StaggerItem } from '@/components/motion'
 
-const industries: { icon: LucideIcon; name: string; description: string }[] = [
-  { icon: ShoppingBag, name: 'E-commerce', description: 'Automate support, recommendations, and order tracking.' },
-  { icon: HeartPulse, name: 'Healthcare', description: 'Streamline patient intake, scheduling, and follow-ups.' },
-  { icon: Building2, name: 'SaaS', description: 'Onboard users, manage trials, and reduce churn automatically.' },
-  { icon: GraduationCap, name: 'Education', description: 'Personalize learning paths and automate grading.' },
-  { icon: Factory, name: 'Manufacturing', description: 'Monitor supply chains and predict maintenance needs.' },
-  { icon: Banknote, name: 'Finance', description: 'Automate compliance checks, reporting, and fraud detection.' },
-];
+const industries: {
+  icon: LucideIcon
+  title: string
+  description: string
+}[] = [
+  {
+    icon: ShoppingBag,
+    title: 'E-commerce',
+    description:
+      'Automate order processing, customer support, and personalized recommendations at scale.',
+  },
+  {
+    icon: HeartPulse,
+    title: 'Healthcare',
+    description:
+      'Streamline patient intake, claims processing, and appointment scheduling — HIPAA compliant.',
+  },
+  {
+    icon: Building2,
+    title: 'Real Estate',
+    description:
+      'Qualify leads, schedule viewings, and automate follow-ups so no deal slips through.',
+  },
+  {
+    icon: GraduationCap,
+    title: 'Education',
+    description:
+      'Handle enrollment, student support, and content delivery with intelligent agents.',
+  },
+  {
+    icon: Factory,
+    title: 'Manufacturing',
+    description:
+      'Monitor supply chains, automate procurement, and predict maintenance needs.',
+  },
+  {
+    icon: Banknote,
+    title: 'Finance',
+    description:
+      'Automate compliance checks, fraud detection, and customer onboarding workflows.',
+  },
+]
 
 export function Industries() {
   return (
-    <section id="industries" className="relative py-24 sm:py-32">
+    <section className="py-20 md:py-28">
       <Container>
         <SectionHeading
-          align="center"
           eyebrow="Industries"
           title="Built for every industry"
-          description="From startups to enterprises, Agentix adapts to your industry's unique workflows."
+          description="From startups to enterprises, teams across sectors use Nexus to automate their unique workflows."
         />
 
-        <Stagger className="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Stagger className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {industries.map((industry) => (
-            <StaggerItem key={industry.name}>
-              <div className="group flex items-start gap-4 rounded-2xl border border-border/60 bg-card/50 p-5 shadow-soft backdrop-blur-sm transition-all hover:border-primary/40 hover:shadow-premium">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
+            <StaggerItem key={industry.title}>
+              <div className="group h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-secondary/10 text-secondary transition-transform duration-300 group-hover:scale-110">
                   <industry.icon className="h-5 w-5" />
                 </div>
-                <div>
-                  <h3 className="font-display text-base font-semibold tracking-tight">
-                    {industry.name}
-                  </h3>
-                  <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
-                    {industry.description}
-                  </p>
-                </div>
+                <h3 className="mb-2 text-lg font-semibold">{industry.title}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {industry.description}
+                </p>
               </div>
             </StaggerItem>
           ))}
         </Stagger>
       </Container>
     </section>
-  );
+  )
 }

@@ -1,7 +1,7 @@
-'use client';
+'use client'
 
-import * as React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Send,
   CheckCircle2,
@@ -12,174 +12,169 @@ import {
   MapPin,
   CalendarClock,
   ShieldCheck,
-} from 'lucide-react';
-import { Container } from '@/components/container';
-import { SectionHeading } from '@/components/section-heading';
-import { Reveal } from '@/components/motion';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
+} from 'lucide-react'
+import { Container } from '@/components/container'
+import { SectionHeading } from '@/components/section-heading'
+import { Reveal } from '@/components/motion'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 
-type Status = 'idle' | 'submitting' | 'success' | 'error';
+const EASE = [0.22, 1, 0.36, 1] as const
 
-interface FormState {
-  name: string;
-  email: string;
-  company: string;
-  message: string;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+type Status = 'idle' | 'submitting' | 'success' | 'error'
+
+type FormData = {
+  name: string
+  email: string
+  company: string
+  message: string
 }
 
-interface Errors {
-  name?: string;
-  email?: string;
-  message?: string;
-}
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function validate(values: FormState): Errors {
-  const errors: Errors = {};
-  if (!values.name.trim()) errors.name = 'Please enter your name.';
-  else if (values.name.trim().length < 2) errors.name = 'Name must be at least 2 characters.';
-  if (!values.email.trim()) errors.email = 'Please enter your email address.';
-  else if (!EMAIL_RE.test(values.email.trim())) errors.email = 'Please enter a valid email address.';
-  if (!values.message.trim()) errors.message = 'Please tell us a little about your needs.';
-  else if (values.message.trim().length < 10) errors.message = 'Message must be at least 10 characters.';
-  return errors;
-}
+type Errors = Partial<Record<keyof FormData, string>>
 
 const contactInfo = [
-  { icon: Mail, label: 'Email us', value: 'sales@agentix.ai', href: 'mailto:sales@agentix.ai' },
-  { icon: Phone, label: 'Call us', value: '+1 (415) 555-0199', href: 'tel:+14155550199' },
-  { icon: MapPin, label: 'Visit us', value: '548 Market St, San Francisco, CA', href: '#' },
-];
+  {
+    icon: Mail,
+    label: 'Email',
+    value: 'hello@nexus.io',
+    description: 'We reply within 24 hours',
+  },
+  {
+    icon: Phone,
+    label: 'Phone',
+    value: '+1 (555) 123-4567',
+    description: 'Mon–Fri, 9am–6pm PT',
+  },
+  {
+    icon: MapPin,
+    label: 'Office',
+    value: 'San Francisco, CA',
+    description: '535 Mission St, 14th Floor',
+  },
+  {
+    icon: CalendarClock,
+    label: 'Book a demo',
+    value: '30-min walkthrough',
+    description: 'See Nexus in action',
+  },
+]
 
-export function ContactForm() {
-  const [values, setValues] = React.useState<FormState>({
+export function Contact() {
+  const [form, setForm] = useState<FormData>({
     name: '',
     email: '',
     company: '',
     message: '',
-  });
-  const [errors, setErrors] = React.useState<Errors>({});
-  const [touched, setTouched] = React.useState<Record<keyof FormState, boolean>>({
-    name: false,
-    email: false,
-    company: false,
-    message: false,
-  });
-  const [status, setStatus] = React.useState<Status>('idle');
+  })
+  const [errors, setErrors] = useState<Errors>({})
+  const [status, setStatus] = useState<Status>('idle')
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setValues((v) => ({ ...v, [name]: value }));
-    if (touched[name as keyof FormState]) {
-      setErrors(validate({ ...values, [name]: value }));
+  const validate = (): boolean => {
+    const next: Errors = {}
+    if (!form.name.trim()) next.name = 'Name is required'
+    if (!form.email.trim()) {
+      next.email = 'Email is required'
+    } else if (!EMAIL_RE.test(form.email)) {
+      next.email = 'Please enter a valid email address'
     }
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name } = e.target;
-    setTouched((t) => ({ ...t, [name]: true }));
-    setErrors(validate(values));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const validationErrors = validate(values);
-    setErrors(validationErrors);
-    setTouched({ name: true, email: true, company: true, message: true });
-    if (Object.keys(validationErrors).length > 0) {
-      setStatus('error');
-      return;
+    if (!form.message.trim()) {
+      next.message = 'Message is required'
+    } else if (form.message.trim().length < 10) {
+      next.message = 'Message must be at least 10 characters'
     }
-    setStatus('submitting');
+    setErrors(next)
+    return Object.keys(next).length === 0
+  }
+
+  const handleChange = (
+    field: keyof FormData,
+    value: string
+  ) => {
+    setForm((prev) => ({ ...prev, [field]: value }))
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }))
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!validate()) return
+    setStatus('submitting')
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-      setStatus('success');
-      setValues({ name: '', email: '', company: '', message: '' });
-      setTouched({ name: false, email: false, company: false, message: false });
+      await new Promise((resolve) => setTimeout(resolve, 1200))
+      setStatus('success')
+      setForm({ name: '', email: '', company: '', message: '' })
     } catch {
-      setStatus('error');
+      setStatus('error')
     }
-  };
+  }
 
   return (
-    <section id="contact" className="relative py-24 sm:py-32">
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-1/4 h-80 w-[700px] -translate-x-1/2 rounded-full bg-primary/10 blur-[130px]" />
-      </div>
+    <section className="py-20 md:py-28">
       <Container>
         <SectionHeading
           eyebrow="Contact"
-          title="Let's talk about your AI automation"
-          description="Tell us about your team and goals. We'll get back to you within one business day with a personalized plan."
+          title="Let's talk"
+          description="Have a question or want to see a demo? Send us a message and we'll get back to you within 24 hours."
         />
 
-        <div className="mx-auto mt-14 grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-5">
-          <Reveal className="lg:col-span-2">
-            <div className="flex h-full flex-col gap-6 rounded-2xl border border-border/60 bg-card/50 p-6 shadow-soft backdrop-blur-sm">
-              <div>
-                <h3 className="font-display text-lg font-semibold tracking-tight">
-                  Get in touch
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Prefer a direct line? Reach us through any of these channels.
-                </p>
-              </div>
-              <ul className="space-y-4">
-                {contactInfo.map((item) => (
-                  <li key={item.label}>
-                    <a
-                      href={item.href}
-                      className="group flex items-start gap-3 rounded-lg p-2 transition-colors hover:bg-muted/40"
-                    >
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                        <item.icon className="h-4 w-4" />
-                      </span>
-                      <span>
-                        <span className="block text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                          {item.label}
-                        </span>
-                        <span className="block text-sm font-medium text-foreground group-hover:text-primary">
-                          {item.value}
-                        </span>
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto flex items-center gap-2 rounded-lg bg-emerald-500/10 px-3 py-2.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                <ShieldCheck className="h-4 w-4 shrink-0" />
-                Your data is encrypted and never shared.
+        <div className="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-2">
+          {/* Left: contact info */}
+          <Reveal>
+            <div className="flex flex-col gap-4">
+              {contactInfo.map((info) => (
+                <div
+                  key={info.label}
+                  className="flex items-start gap-4 rounded-2xl border border-border bg-card p-5"
+                >
+                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <info.icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                      {info.label}
+                    </p>
+                    <p className="mt-0.5 text-sm font-semibold">{info.value}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {info.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              <div className="flex items-center gap-2 rounded-2xl border border-border bg-emerald-500/5 p-4 text-sm text-muted-foreground">
+                <ShieldCheck className="h-5 w-5 text-emerald-500" />
+                Your data is protected with SOC 2 Type II compliance and end-to-end encryption.
               </div>
             </div>
           </Reveal>
 
-          <Reveal delay={0.1} className="lg:col-span-3">
-            <div className="rounded-2xl border border-border/60 bg-card/60 p-6 shadow-soft backdrop-blur-sm sm:p-8">
+          {/* Right: form */}
+          <Reveal delay={0.1}>
+            <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
               <AnimatePresence mode="wait">
                 {status === 'success' ? (
                   <motion.div
                     key="success"
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -12 }}
-                    className="flex flex-col items-center justify-center py-12 text-center"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.4, ease: EASE }}
+                    className="flex flex-col items-center justify-center py-16 text-center"
                   >
-                    <span className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-500">
-                      <CheckCircle2 className="h-7 w-7" />
+                    <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
+                      <CheckCircle2 className="h-8 w-8" />
                     </span>
-                    <h3 className="mt-5 font-display text-xl font-semibold tracking-tight">
-                      Message sent successfully
-                    </h3>
-                    <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-                      Thanks for reaching out. Our team will contact you within one business day.
+                    <h3 className="text-xl font-semibold">Message sent!</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Thanks for reaching out. We will get back to you within 24 hours.
                     </p>
                     <button
                       onClick={() => setStatus('idle')}
-                      className="mt-6 inline-flex h-10 items-center justify-center rounded-lg border border-border bg-background px-5 text-sm font-medium transition-colors hover:bg-muted"
+                      className="mt-6 text-sm font-medium text-primary hover:underline"
                     >
                       Send another message
                     </button>
@@ -190,115 +185,97 @@ export function ContactForm() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3, ease: EASE }}
                     onSubmit={handleSubmit}
                     noValidate
-                    aria-label="Contact form"
-                    className="space-y-5"
+                    className="flex flex-col gap-5"
                   >
-                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                      <div className="space-y-1.5">
-                        <Label htmlFor="name" className="text-sm font-medium">
-                          Full name <span className="text-destructive">*</span>
-                        </Label>
-                        <Input
-                          id="name"
-                          name="name"
-                          type="text"
-                          autoComplete="name"
-                          required
-                          value={values.name}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          aria-invalid={!!errors.name}
-                          aria-describedby={errors.name ? 'name-error' : undefined}
-                          placeholder="Jane Cooper"
-                          className={cn(errors.name && 'border-destructive focus-visible:ring-destructive')}
-                        />
-                        {errors.name && (
-                          <p id="name-error" role="alert" className="flex items-center gap-1.5 text-xs text-destructive">
-                            <AlertCircle className="h-3.5 w-3.5" />
-                            {errors.name}
-                          </p>
-                        )}
-                      </div>
-                      <div className="space-y-1.5">
-                        <Label htmlFor="email" className="text-sm font-medium">
-                          Work email <span className="text-destructive">*</span>
-                        </Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          autoComplete="email"
-                          required
-                          value={values.email}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          aria-invalid={!!errors.email}
-                          aria-describedby={errors.email ? 'email-error' : undefined}
-                          placeholder="jane@company.com"
-                          className={cn(errors.email && 'border-destructive focus-visible:ring-destructive')}
-                        />
-                        {errors.email && (
-                          <p id="email-error" role="alert" className="flex items-center gap-1.5 text-xs text-destructive">
-                            <AlertCircle className="h-3.5 w-3.5" />
-                            {errors.email}
-                          </p>
-                        )}
-                      </div>
+                    {/* Name */}
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="name">Name *</Label>
+                      <Input
+                        id="name"
+                        value={form.name}
+                        onChange={(e) => handleChange('name', e.target.value)}
+                        placeholder="Jane Doe"
+                        aria-invalid={!!errors.name}
+                        className={cn(errors.name && 'border-red-500')}
+                      />
+                      {errors.name && (
+                        <p className="flex items-center gap-1 text-xs text-red-500">
+                          <AlertCircle className="h-3 w-3" />
+                          {errors.name}
+                        </p>
+                      )}
                     </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="company" className="text-sm font-medium">
-                        Company <span className="text-muted-foreground">(optional)</span>
+
+                    {/* Email */}
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="email">Email *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={form.email}
+                        onChange={(e) => handleChange('email', e.target.value)}
+                        placeholder="jane@company.com"
+                        aria-invalid={!!errors.email}
+                        className={cn(errors.email && 'border-red-500')}
+                      />
+                      {errors.email && (
+                        <p className="flex items-center gap-1 text-xs text-red-500">
+                          <AlertCircle className="h-3 w-3" />
+                          {errors.email}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Company */}
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="company">
+                        Company{' '}
+                        <span className="text-muted-foreground">(optional)</span>
                       </Label>
                       <Input
                         id="company"
-                        name="company"
-                        type="text"
-                        autoComplete="organization"
-                        value={values.company}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        placeholder="Acme Inc."
+                        value={form.company}
+                        onChange={(e) => handleChange('company', e.target.value)}
+                        placeholder="Acme Corp"
                       />
                     </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="message" className="text-sm font-medium">
-                        How can we help? <span className="text-destructive">*</span>
-                      </Label>
+
+                    {/* Message */}
+                    <div className="flex flex-col gap-1.5">
+                      <Label htmlFor="message">Message *</Label>
                       <Textarea
                         id="message"
-                        name="message"
-                        required
-                        rows={4}
-                        value={values.message}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
+                        value={form.message}
+                        onChange={(e) => handleChange('message', e.target.value)}
+                        placeholder="Tell us what you'd like to automate..."
+                        rows={5}
                         aria-invalid={!!errors.message}
-                        aria-describedby={errors.message ? 'message-error' : undefined}
-                        placeholder="Tell us about your team size, current tools, and what you'd like to automate..."
-                        className={cn(errors.message && 'border-destructive focus-visible:ring-destructive')}
+                        className={cn(errors.message && 'border-red-500')}
                       />
                       {errors.message && (
-                        <p id="message-error" role="alert" className="flex items-center gap-1.5 text-xs text-destructive">
-                          <AlertCircle className="h-3.5 w-3.5" />
+                        <p className="flex items-center gap-1 text-xs text-red-500">
+                          <AlertCircle className="h-3 w-3" />
                           {errors.message}
                         </p>
                       )}
                     </div>
 
-                    {status === 'error' && Object.keys(errors).length === 0 && (
-                      <div role="alert" className="flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-                        <AlertCircle className="h-4 w-4 shrink-0" />
-                        Something went wrong. Please try again or email us directly.
-                      </div>
+                    {status === 'error' && (
+                      <p className="flex items-center gap-1 text-sm text-red-500">
+                        <AlertCircle className="h-4 w-4" />
+                        Something went wrong. Please try again.
+                      </p>
                     )}
 
                     <button
                       type="submit"
                       disabled={status === 'submitting'}
-                      aria-label={status === 'submitting' ? 'Sending your message' : 'Send message'}
-                      className="group/btn inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-sm font-semibold text-white shadow-glow transition-all hover:shadow-premium hover:brightness-110 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:px-7"
+                      className={cn(
+                        'inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60'
+                      )}
                     >
                       {status === 'submitting' ? (
                         <>
@@ -307,15 +284,11 @@ export function ContactForm() {
                         </>
                       ) : (
                         <>
+                          <Send className="h-4 w-4" />
                           Send message
-                          <Send className="h-4 w-4 transition-transform group-hover/btn:translate-x-0.5" />
                         </>
                       )}
                     </button>
-                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <CalendarClock className="h-3.5 w-3.5" />
-                      Average response time: under 1 business day
-                    </p>
                   </motion.form>
                 )}
               </AnimatePresence>
@@ -324,5 +297,5 @@ export function ContactForm() {
         </div>
       </Container>
     </section>
-  );
+  )
 }

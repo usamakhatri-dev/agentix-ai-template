@@ -1,111 +1,135 @@
-'use client';
+import Link from 'next/link'
+import {
+  Sparkles,
+  Twitter,
+  Linkedin,
+  Github,
+  Youtube,
+  type LucideIcon,
+} from 'lucide-react'
+import { Container } from '@/components/container'
 
-import * as React from 'react';
-import Link from 'next/link';
-import { Sparkles, Twitter, Linkedin, Github, Youtube } from 'lucide-react';
-import { Container } from '@/components/container';
+const navColumns: {
+  title: string
+  links: { label: string; href: string }[]
+}[] = [
+  {
+    title: 'Product',
+    links: [
+      { label: 'Features', href: '/features' },
+      { label: 'Integrations', href: '/integrations' },
+      { label: 'Pricing', href: '/pricing' },
+      { label: 'Changelog', href: '/changelog' },
+      { label: 'Roadmap', href: '/roadmap' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'About', href: '/about' },
+      { label: 'Careers', href: '/careers' },
+      { label: 'Blog', href: '/blog' },
+      { label: 'Press', href: '/press' },
+      { label: 'Contact', href: '/contact' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Documentation', href: '/docs' },
+      { label: 'API Reference', href: '/docs/api' },
+      { label: 'Guides', href: '/guides' },
+      { label: 'Community', href: '/community' },
+      { label: 'Status', href: '/status' },
+    ],
+  },
+  {
+    title: 'Legal',
+    links: [
+      { label: 'Privacy', href: '/privacy' },
+      { label: 'Terms', href: '/terms' },
+      { label: 'Security', href: '/security' },
+      { label: 'DPA', href: '/dpa' },
+      { label: 'Cookies', href: '/cookies' },
+    ],
+  },
+]
 
-const footerNav = {
-  Product: [
-    { label: 'Features', href: '#features' },
-    { label: 'How It Works', href: '#how-it-works' },
-    { label: 'Showcase', href: '#showcase' },
-    { label: 'Pricing', href: '#pricing' },
-    { label: 'Changelog', href: '#' },
-  ],
-  Company: [
-    { label: 'About', href: '#' },
-    { label: 'Blog', href: '#' },
-    { label: 'Careers', href: '#' },
-    { label: 'Contact', href: '#contact' },
-    { label: 'Case Study', href: '#case-study' },
-  ],
-  Resources: [
-    { label: 'Documentation', href: '#' },
-    { label: 'API Reference', href: '#' },
-    { label: 'Community', href: '#' },
-    { label: 'Tutorials', href: '#' },
-    { label: 'Status', href: '#' },
-  ],
-  Legal: [
-    { label: 'Privacy', href: '#' },
-    { label: 'Terms', href: '#' },
-    { label: 'Security', href: '#' },
-    { label: 'DPA', href: '#' },
-    { label: 'Cookies', href: '#' },
-  ],
-};
-
-const socials = [
-  { icon: Twitter, href: '#', label: 'Twitter' },
-  { icon: Linkedin, href: '#', label: 'LinkedIn' },
-  { icon: Github, href: '#', label: 'GitHub' },
-  { icon: Youtube, href: '#', label: 'YouTube' },
-];
+const socials: { icon: LucideIcon; href: string; label: string }[] = [
+  { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
+  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+  { icon: Github, href: 'https://github.com', label: 'GitHub' },
+  { icon: Youtube, href: 'https://youtube.com', label: 'YouTube' },
+]
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/60 bg-muted/20">
-      <Container className="py-16">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-6 lg:gap-12">
-          <div className="col-span-2 md:col-span-2">
-            <Link href="#" className="flex items-center gap-2.5" aria-label="Agentix AI home">
-              <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary via-secondary to-accent shadow-glow">
-                <Sparkles className="h-5 w-5 text-white" />
-              </span>
-              <span className="font-display text-lg font-semibold tracking-tight">
-                Agentix<span className="text-primary"> AI</span>
-              </span>
-            </Link>
-            <p className="mt-4 max-w-xs text-sm text-muted-foreground leading-relaxed">
-              The AI automation platform for modern businesses. Deploy intelligent agents, automate workflows, and scale faster.
-            </p>
-            <div className="mt-6 flex items-center gap-2">
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  aria-label={s.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 bg-card/50 text-muted-foreground transition-all hover:border-primary/40 hover:text-primary"
-                >
-                  <s.icon className="h-4 w-4" />
-                </a>
-              ))}
+    <footer className="border-t border-border bg-muted/20">
+      <Container>
+        <div className="py-14">
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-6">
+            {/* Logo + description */}
+            <div className="col-span-2">
+              <Link href="/" className="flex items-center gap-2">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <Sparkles className="h-5 w-5" />
+                </span>
+                <span className="text-lg font-semibold tracking-tight">Nexus</span>
+              </Link>
+              <p className="mt-4 max-w-xs text-sm text-muted-foreground">
+                Automate the busywork. Scale what matters. The AI automation
+                platform for modern teams.
+              </p>
+              <div className="mt-5 flex items-center gap-2 text-xs text-muted-foreground">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                </span>
+                All systems operational
+              </div>
             </div>
+
+            {/* Nav columns */}
+            {navColumns.map((col) => (
+              <div key={col.title}>
+                <h4 className="text-sm font-semibold">{col.title}</h4>
+                <ul className="mt-4 space-y-2.5">
+                  {col.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
 
-          {Object.entries(footerNav).map(([title, links]) => (
-            <div key={title}>
-              <h3 className="text-sm font-semibold">{title}</h3>
-              <ul className="mt-4 space-y-2.5">
-                {links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+          {/* Bottom bar */}
+          <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
+            <p className="text-xs text-muted-foreground">
+              © {new Date().getFullYear()} Nexus Inc. All rights reserved.
+            </p>
+            <div className="flex items-center gap-4">
+              {socials.map((social) => (
+                <Link
+                  key={social.label}
+                  href={social.href}
+                  aria-label={social.label}
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <social.icon className="h-5 w-5" />
+                </Link>
+              ))}
             </div>
-          ))}
-        </div>
-
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border/60 pt-8 sm:flex-row">
-          <p className="text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} Agentix Labs. All rights reserved.
-          </p>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              All systems operational
-            </span>
-            <span>v1.0.0</span>
+            <p className="text-xs text-muted-foreground">v1.0.0</p>
           </div>
         </div>
       </Container>
     </footer>
-  );
+  )
 }
