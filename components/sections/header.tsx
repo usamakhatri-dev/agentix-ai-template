@@ -1,21 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Menu, X, Sun, Moon } from 'lucide-react';
-import { Container } from '@/components/container';
 import { Button } from '@/components/ui/button';
+import { Container } from '@/components/container';
 import { useTheme } from '@/components/theme-provider';
-import { cn } from '@/lib/utils';
 import { navLinks } from '@/data/navigation';
+import { cn } from '@/lib/utils';
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
   const { theme, toggleTheme } = useTheme();
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+  React.useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 12);
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -24,29 +28,31 @@ export function Header() {
   return (
     <header
       className={cn(
-        'fixed inset-x-0 top-0 z-50 transition-all duration-300',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         scrolled
-          ? 'border-b border-border bg-background/80 backdrop-blur-md shadow-soft'
+          ? 'border-b border-border bg-background/80 backdrop-blur-lg shadow-soft'
           : 'border-b border-transparent bg-transparent',
       )}
     >
       <Container>
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary text-white shadow-glow">
-              <Sparkles className="h-5 w-5" />
+          <a href="#" className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-glow">
+              <Sparkles className="h-5 w-5 text-white" />
             </div>
-            <span className="text-lg font-bold tracking-tight font-display">Agentix AI</span>
+            <span className="font-display text-lg font-semibold tracking-tight">
+              Agentix AI
+            </span>
           </a>
 
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((link) => (
               <a
-                key={link.label}
+                key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 {link.label}
               </a>
@@ -60,12 +66,16 @@ export function Header() {
               aria-label="Toggle theme"
               className="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
-              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              {theme === 'dark' ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
             </button>
-            <Button variant="ghost" size="default">
+            <Button variant="ghost" size="sm">
               Login
             </Button>
-            <Button variant="brand" size="default">
+            <Button variant="brand" size="sm">
               Start Free
             </Button>
           </div>
@@ -77,14 +87,22 @@ export function Header() {
               aria-label="Toggle theme"
               className="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
-              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              {theme === 'dark' ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
             </button>
             <button
-              onClick={() => setMobileOpen((prev) => !prev)}
+              onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-muted"
             >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </button>
           </div>
         </div>
@@ -97,23 +115,23 @@ export function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-b border-border bg-background md:hidden"
+            transition={{ duration: 0.3, ease: EASE }}
+            className="overflow-hidden border-t border-border bg-background md:hidden"
           >
             <Container>
               <nav className="flex flex-col gap-1 py-4">
                 {navLinks.map((link) => (
                   <a
-                    key={link.label}
+                    key={link.href}
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    className="rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                   >
                     {link.label}
                   </a>
                 ))}
-                <div className="mt-2 flex flex-col gap-2 px-1">
-                  <Button variant="outline" size="default">
+                <div className="mt-3 flex flex-col gap-2 border-t border-border pt-4">
+                  <Button variant="ghost" size="default">
                     Login
                   </Button>
                   <Button variant="brand" size="default">

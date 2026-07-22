@@ -1,59 +1,58 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { Container } from '@/components/container';
 import { SectionHeading } from '@/components/section-heading';
 import { Reveal } from '@/components/motion';
-import { cn } from '@/lib/utils';
 import { testimonials } from '@/data/testimonials';
+import { cn } from '@/lib/utils';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function Testimonials() {
-  const [perView, setPerView] = useState(3);
-  const [current, setCurrent] = useState(0);
+  const [perView, setPerView] = React.useState(3);
+  const [index, setIndex] = React.useState(0);
+  const rafRef = React.useRef<number | null>(null);
 
-  useEffect(() => {
-    let rafId: number | null = null;
+  React.useEffect(() => {
     const updatePerView = () => {
-      if (rafId !== null) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        if (window.innerWidth < 640) {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      rafRef.current = requestAnimationFrame(() => {
+        const width = window.innerWidth;
+        if (width < 640) {
           setPerView(1);
-        } else if (window.innerWidth < 1024) {
+        } else if (width < 1024) {
           setPerView(2);
         } else {
           setPerView(3);
         }
       });
     };
+
     updatePerView();
     window.addEventListener('resize', updatePerView, { passive: true });
     return () => {
       window.removeEventListener('resize', updatePerView);
-      if (rafId !== null) cancelAnimationFrame(rafId);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
     };
   }, []);
 
   const maxIndex = Math.max(0, testimonials.length - perView);
 
-  useEffect(() => {
-    if (current > maxIndex) {
-      setCurrent(maxIndex);
+  React.useEffect(() => {
+    if (index > maxIndex) {
+      setIndex(maxIndex);
     }
-  }, [maxIndex, current]);
+  }, [maxIndex, index]);
 
-  const next = useCallback(() => {
-    setCurrent((prev) => (prev >= maxIndex ? 0 : prev + 1));
-  }, [maxIndex]);
-
-  const prev = useCallback(() => {
-    setCurrent((prev) => (prev <= 0 ? maxIndex : prev - 1));
-  }, [maxIndex]);
-
-  const totalDots = maxIndex + 1;
+  const next = () => setIndex((prev) => Math.min(prev + 1, maxIndex));
+  const prev = () => setIndex((prev) => Math.max(prev - 1, 0));
 
   return (
     <section id="testimonials" className="border-y border-border bg-muted/20 py-20 sm:py-28">
@@ -68,94 +67,90 @@ export function Testimonials() {
         </Reveal>
 
         {/* Carousel */}
-        <Reveal delay={0.1}>
-          <div className="mt-12">
-            <div className="relative overflow-hidden">
-              <motion.div
-                className="flex"
-                animate={{ x: `calc(-${current} * (100% / ${perView}))` }}
-                transition={{ duration: 0.5, ease: EASE }}
-              >
-                {testimonials.map((testimonial) => (
-                  <div
-                    key={testimonial.name}
-                    className="shrink-0 px-3"
-                    style={{ width: `${100 / perView}%` }}
-                  >
-                    <div className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-soft">
-                      {/* Quote icon */}
-                      <Quote className="h-8 w-8 text-primary/20" />
+        <div className="mt-14">
+          <div className="overflow-hidden">
+            <motion.div
+              className="flex gap-6"
+              animate={{ x: `calc(-${index} * (100% / ${perView} + 0px))` }}
+              transition={{ duration: 0.5, ease: EASE }}
+              style={{ width: `${(testimonials.length / perView) * 100}%` }}
+            >
+              {testimonials.map((testimonial) => (
+                <div
+                  key={testimonial.name}
+                  className="shrink-0"
+                  style={{ width: `${(100 / testimonials.length) * perView}%` }}
+                >
+                  <div className="h-full rounded-2xl border border-border bg-card p-6">
+                    {/* Rating */}
+                    <div className="flex gap-0.5">
+                      {Array.from({ length: testimonial.rating }).map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                      ))}
+                    </div>
 
-                      {/* Stars */}
-                      <div className="mt-4 flex gap-0.5">
-                        {Array.from({ length: testimonial.rating }).map((_, i) => (
-                          <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                        ))}
-                      </div>
+                    {/* Quote */}
+                    <p className="mt-4 text-sm leading-relaxed text-foreground">
+                      &ldquo;{testimonial.quote}&rdquo;
+                    </p>
 
-                      {/* Quote */}
-                      <p className="mt-4 flex-1 text-sm leading-relaxed text-muted-foreground">
-                        &ldquo;{testimonial.quote}&rdquo;
-                      </p>
-
-                      {/* Author */}
-                      <div className="mt-6 flex items-center gap-3 border-t border-border pt-4">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={testimonial.avatar}
-                          alt={testimonial.name}
-                          className="h-10 w-10 rounded-full object-cover"
-                        />
-                        <div>
-                          <div className="text-sm font-semibold">{testimonial.name}</div>
-                          <div className="text-xs text-muted-foreground">
-                            {testimonial.role}, {testimonial.company}
-                          </div>
-                        </div>
+                    {/* Author */}
+                    <div className="mt-6 flex items-center gap-3 border-t border-border pt-4">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={testimonial.avatar}
+                        alt={testimonial.name}
+                        className="h-10 w-10 rounded-full object-cover"
+                      />
+                      <div>
+                        <p className="text-sm font-semibold">{testimonial.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {testimonial.role}, {testimonial.company}
+                        </p>
                       </div>
                     </div>
                   </div>
-                ))}
-              </motion.div>
-            </div>
-
-            {/* Navigation */}
-            <div className="mt-8 flex items-center justify-center gap-4">
-              {/* Prev button */}
-              <button
-                onClick={prev}
-                aria-label="Previous testimonials"
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-border text-muted-foreground transition-all hover:border-primary/30 hover:text-primary"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-
-              {/* Dots */}
-              <div className="flex items-center gap-2">
-                {Array.from({ length: totalDots }).map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setCurrent(i)}
-                    aria-label={`Go to slide ${i + 1}`}
-                    className={cn(
-                      'h-2 rounded-full transition-all',
-                      current === i ? 'w-6 bg-primary' : 'w-2 bg-border hover:bg-muted-foreground',
-                    )}
-                  />
-                ))}
-              </div>
-
-              {/* Next button */}
-              <button
-                onClick={next}
-                aria-label="Next testimonials"
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-border text-muted-foreground transition-all hover:border-primary/30 hover:text-primary"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-            </div>
+                </div>
+              ))}
+            </motion.div>
           </div>
-        </Reveal>
+
+          {/* Controls */}
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <button
+              onClick={prev}
+              disabled={index === 0}
+              aria-label="Previous testimonials"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+
+            {/* Dots */}
+            <div className="flex items-center gap-1.5">
+              {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setIndex(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                  className={cn(
+                    'h-2 rounded-full transition-all',
+                    index === i ? 'w-6 bg-primary' : 'w-2 bg-muted-foreground/30',
+                  )}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={next}
+              disabled={index === maxIndex}
+              aria-label="Next testimonials"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
       </Container>
     </section>
   );

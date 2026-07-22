@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, Zap, BarChart3, CheckCircle2, type LucideIcon } from 'lucide-react';
 import { Container } from '@/components/container';
@@ -17,7 +17,6 @@ interface Tab {
   title: string;
   description: string;
   features: string[];
-  bars: number[];
 }
 
 const tabs: Tab[] = [
@@ -26,51 +25,46 @@ const tabs: Tab[] = [
     label: 'Agents',
     icon: Bot,
     title: 'Autonomous AI agents that work around the clock',
-    description:
-      'Deploy AI agents that handle complex workflows end-to-end. From customer support to data analysis, your agents learn from every interaction and improve over time.',
+    description: 'Deploy intelligent agents that handle customer support, lead qualification, data entry, and more. Each agent learns from interactions and improves over time.',
     features: [
       'Contextual memory across conversations',
-      'Multi-step reasoning and decision making',
-      'Human-in-the-loop approval workflows',
-      'Automatic escalation for edge cases',
+      'Multi-language support out of the box',
+      'Human handoff when confidence is low',
+      'Custom personality and brand voice',
     ],
-    bars: [40, 65, 50, 80, 55, 70, 90, 60, 75, 85, 45, 95],
   },
   {
     id: 'workflows',
     label: 'Workflows',
     icon: Zap,
     title: 'Visual workflow builder for any process',
-    description:
-      'Design powerful automation workflows with our drag-and-drop builder. Connect triggers, actions, and conditions without writing a single line of code.',
+    description: 'Design complex automations with a drag-and-drop editor. Connect triggers, conditions, and actions across 200+ tools without writing code.',
     features: [
       'Drag-and-drop visual editor',
-      '200+ pre-built integrations',
       'Conditional logic and branching',
-      'Scheduled and event-triggered runs',
+      'Schedule-based triggers',
+      'Real-time error handling and retries',
     ],
-    bars: [30, 55, 70, 45, 85, 60, 50, 75, 90, 40, 65, 80],
   },
   {
     id: 'analytics',
     label: 'Analytics',
     icon: BarChart3,
-    title: 'Real-time analytics and business insights',
-    description:
-      'Monitor agent performance, workflow throughput, and business impact with live dashboards. Make data-driven decisions with customizable reports.',
+    title: 'Real-time insights into every automation',
+    description: 'Monitor agent performance, workflow throughput, and business impact with live dashboards. Export reports and set custom alerts.',
     features: [
       'Live performance dashboards',
       'Custom report builder',
-      'ROI tracking and attribution',
-      'Bottleneck identification',
+      'ROI tracking per workflow',
+      'Anomaly detection and alerts',
     ],
-    bars: [60, 40, 85, 70, 50, 90, 55, 75, 45, 80, 65, 95],
   },
 ];
 
 export function Showcase() {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = React.useState(0);
   const tab = tabs[activeTab];
+  const Icon = tab.icon;
 
   return (
     <section id="showcase" className="py-20 sm:py-28">
@@ -80,16 +74,16 @@ export function Showcase() {
             align="center"
             eyebrow="Showcase"
             title="See Agentix AI in action"
-            description="Explore the core capabilities that make Agentix AI the most powerful automation platform for modern businesses."
+            description="Explore the three pillars of the platform: autonomous agents, visual workflows, and real-time analytics."
           />
         </Reveal>
 
-        {/* Tab buttons */}
+        {/* Tabs */}
         <Reveal delay={0.1}>
           <div className="mt-10 flex justify-center">
-            <div className="inline-flex items-center gap-1 rounded-xl border border-border bg-card p-1 shadow-soft">
+            <div className="inline-flex items-center gap-1 rounded-xl border border-border bg-card p-1">
               {tabs.map((t, i) => {
-                const Icon = t.icon;
+                const TabIcon = t.icon;
                 return (
                   <button
                     key={t.id}
@@ -101,7 +95,7 @@ export function Showcase() {
                         : 'text-muted-foreground hover:text-foreground',
                     )}
                   >
-                    <Icon className="h-4 w-4" />
+                    <TabIcon className="h-4 w-4" />
                     {t.label}
                   </button>
                 );
@@ -110,8 +104,8 @@ export function Showcase() {
           </div>
         </Reveal>
 
-        {/* Tab content */}
-        <div className="mt-12 grid grid-cols-1 items-center gap-10 lg:grid-cols-2">
+        {/* Content */}
+        <div className="mt-12 grid items-center gap-10 lg:grid-cols-2">
           {/* Left: text */}
           <AnimatePresence mode="wait">
             <motion.div
@@ -121,13 +115,20 @@ export function Showcase() {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.4, ease: EASE }}
             >
-              <h3 className="text-2xl font-bold tracking-tight font-display sm:text-3xl">{tab.title}</h3>
-              <p className="mt-4 text-base leading-relaxed text-muted-foreground">{tab.description}</p>
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary shadow-glow">
+                <Icon className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="mt-5 font-display text-2xl font-semibold tracking-tight">
+                {tab.title}
+              </h3>
+              <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+                {tab.description}
+              </p>
               <ul className="mt-6 space-y-3">
                 {tab.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3">
                     <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                    <span className="text-sm leading-relaxed">{feature}</span>
+                    <span className="text-sm text-foreground">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -142,50 +143,52 @@ export function Showcase() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.4, ease: EASE }}
-              className="rounded-2xl border border-border bg-card p-6 shadow-premium"
+              className="rounded-2xl border border-border bg-card p-4 shadow-premium"
             >
-              {/* Mockup header */}
-              <div className="flex items-center justify-between border-b border-border pb-4">
-                <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-secondary/10 text-primary">
-                    <tab.icon className="h-4 w-4" />
+              <div className="rounded-xl border border-border bg-background p-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                      <Icon className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="text-sm font-semibold">{tab.label} Overview</span>
                   </div>
-                  <span className="text-sm font-semibold">{tab.label} Dashboard</span>
+                  <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-medium text-primary">
+                    Live
+                  </span>
                 </div>
-                <div className="flex gap-1.5">
-                  <div className="h-2 w-2 rounded-full bg-green-400" />
-                  <div className="h-2 w-2 rounded-full bg-yellow-400" />
-                  <div className="h-2 w-2 rounded-full bg-red-400" />
-                </div>
-              </div>
 
-              {/* Mockup stats */}
-              <div className="mt-4 grid grid-cols-3 gap-3">
-                {[
-                  { label: 'Total', value: '12.4K' },
-                  { label: 'Active', value: '8.2K' },
-                  { label: 'Success', value: '99.2%' },
-                ].map((stat) => (
-                  <div key={stat.label} className="rounded-lg border border-border bg-background p-3">
-                    <div className="text-lg font-bold">{stat.value}</div>
-                    <div className="text-xs text-muted-foreground">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Animated bar chart */}
-              <div className="mt-4 rounded-lg border border-border bg-background p-4">
-                <div className="text-xs font-medium text-muted-foreground">Performance Over Time</div>
-                <div className="mt-3 flex h-40 items-end gap-2">
-                  {tab.bars.map((height, i) => (
-                    <motion.div
-                      key={`${tab.id}-${i}`}
-                      initial={{ height: 0 }}
-                      animate={{ height: `${height}%` }}
-                      transition={{ duration: 0.5, ease: EASE, delay: i * 0.04 }}
-                      className="flex-1 rounded-t bg-gradient-to-t from-primary/40 to-primary"
-                    />
+                {/* Stat row */}
+                <div className="mt-4 grid grid-cols-3 gap-3">
+                  {[
+                    { label: 'Active', value: '1,284' },
+                    { label: 'Today', value: '48.2K' },
+                    { label: 'Success', value: '99.9%' },
+                  ].map((s) => (
+                    <div key={s.label} className="rounded-lg border border-border bg-card p-3">
+                      <p className="text-lg font-semibold">{s.value}</p>
+                      <p className="text-[10px] text-muted-foreground">{s.label}</p>
+                    </div>
                   ))}
+                </div>
+
+                {/* Bar chart */}
+                <div className="mt-4 rounded-lg border border-border bg-card p-4">
+                  <p className="text-xs font-semibold text-muted-foreground">Throughput</p>
+                  <div className="mt-3 flex items-end gap-1 h-28">
+                    {Array.from({ length: 24 }).map((_, i) => (
+                      <motion.div
+                        key={`${tab.id}-${i}`}
+                        initial={{ height: 0 }}
+                        animate={{ height: `${20 + Math.sin(i * 0.6) * 30 + Math.random() * 40}%` }}
+                        transition={{ duration: 0.5, ease: EASE, delay: 0.1 + i * 0.02 }}
+                        className={cn(
+                          'flex-1 rounded-sm',
+                          i % 5 === 0 ? 'bg-primary' : 'bg-primary/30',
+                        )}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </motion.div>

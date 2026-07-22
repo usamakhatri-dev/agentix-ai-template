@@ -15,25 +15,25 @@ const benefits: Benefit[] = [
     icon: Clock,
     stat: '40h',
     label: 'Saved per week',
-    description: 'Free your team from repetitive tasks and let them focus on high-impact work that drives growth.',
+    description: 'Automate repetitive tasks and free your team to focus on high-impact work that drives growth.',
   },
   {
     icon: DollarSign,
     stat: '60%',
     label: 'Cost reduction',
-    description: 'Cut operational costs by consolidating tools and automating workflows across your organization.',
+    description: 'Replace multiple tools and manual processes with a single platform that scales with your needs.',
   },
   {
     icon: TrendingUp,
     stat: '3x',
     label: 'Productivity boost',
-    description: 'AI agents work around the clock, handling tasks in seconds that used to take hours.',
+    description: 'AI agents work around the clock, handling thousands of tasks simultaneously without fatigue.',
   },
   {
     icon: Shield,
     stat: '99.9%',
     label: 'Uptime guarantee',
-    description: 'Enterprise-grade infrastructure ensures your agents are always available when you need them.',
+    description: 'Enterprise-grade infrastructure with SOC 2 Type II compliance and end-to-end encryption.',
   },
 ];
 
@@ -45,25 +45,27 @@ export function Benefits() {
           <SectionHeading
             align="center"
             eyebrow="Benefits"
-            title="Real results, real impact"
-            description="Businesses using Agentix AI see measurable improvements within the first month of deployment."
+            title="Real results, measurable impact"
+            description="Teams using Agentix AI see immediate improvements in efficiency, cost savings, and customer satisfaction."
           />
         </Reveal>
 
-        <Stagger className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {benefits.map((benefit) => {
             const Icon = benefit.icon;
             return (
               <StaggerItem key={benefit.label}>
-                <div className="h-full rounded-2xl border border-border bg-card p-6 text-center shadow-soft transition-all hover:-translate-y-1 hover:shadow-float">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10 text-primary">
-                    <Icon className="h-7 w-7" />
+                <div className="h-full rounded-2xl border border-border bg-card p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-premium">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10">
+                    <Icon className="h-7 w-7 text-primary" />
                   </div>
-                  <div className="mt-5 text-4xl font-bold tracking-tight font-display bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  <p className="mt-5 font-display text-4xl font-bold tracking-tight">
                     {benefit.stat}
-                  </div>
-                  <div className="mt-1 text-sm font-semibold">{benefit.label}</div>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{benefit.description}</p>
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-foreground">{benefit.label}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    {benefit.description}
+                  </p>
                 </div>
               </StaggerItem>
             );

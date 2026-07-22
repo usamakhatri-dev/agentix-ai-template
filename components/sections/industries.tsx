@@ -13,40 +13,40 @@ import { Reveal, Stagger, StaggerItem } from '@/components/motion';
 
 interface Industry {
   icon: LucideIcon;
-  name: string;
+  title: string;
   description: string;
 }
 
 const industries: Industry[] = [
   {
     icon: ShoppingBag,
-    name: 'E-commerce',
-    description: 'Automate customer support, order tracking, and personalized product recommendations at scale.',
+    title: 'E-commerce',
+    description: 'Automate order processing, customer support, and inventory management across channels.',
   },
   {
     icon: HeartPulse,
-    name: 'Healthcare',
-    description: 'Streamline patient intake, appointment scheduling, and clinical documentation with HIPAA-compliant agents.',
+    title: 'Healthcare',
+    description: 'Streamline patient intake, appointment scheduling, and claims processing with HIPAA compliance.',
   },
   {
     icon: Building2,
-    name: 'SaaS',
-    description: 'Onboard users, handle billing inquiries, and provide technical support without expanding your team.',
+    title: 'SaaS',
+    description: 'Automate onboarding, lead qualification, and churn prevention with data-driven workflows.',
   },
   {
     icon: GraduationCap,
-    name: 'Education',
-    description: 'Deliver personalized tutoring, automate grading workflows, and manage student communications.',
+    title: 'Education',
+    description: 'Personalize learning paths, automate grading, and manage student communications at scale.',
   },
   {
     icon: Factory,
-    name: 'Manufacturing',
-    description: 'Monitor supply chains, automate inventory reports, and predict maintenance needs with AI agents.',
+    title: 'Manufacturing',
+    description: 'Monitor supply chains, automate procurement, and predict maintenance needs with AI agents.',
   },
   {
     icon: Banknote,
-    name: 'Finance',
-    description: 'Automate fraud detection, compliance reporting, and customer financial advisory workflows securely.',
+    title: 'Finance',
+    description: 'Automate fraud detection, loan processing, and compliance reporting with audit trails.',
   },
 ];
 
@@ -59,21 +59,25 @@ export function Industries() {
             align="center"
             eyebrow="Industries"
             title="Built for every industry"
-            description="Agentix AI adapts to your industry-specific needs with customizable agents and workflows."
+            description="Agentix AI adapts to the unique needs of your sector with pre-built templates and customizable workflows."
           />
         </Reveal>
 
-        <Stagger className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {industries.map((industry) => {
             const Icon = industry.icon;
             return (
-              <StaggerItem key={industry.name}>
-                <div className="group h-full rounded-2xl border border-border bg-card p-6 shadow-soft transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-float">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 text-primary transition-colors group-hover:from-primary/20 group-hover:to-secondary/20">
-                    <Icon className="h-6 w-6" />
+              <StaggerItem key={industry.title}>
+                <div className="group h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-premium">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 transition-colors group-hover:from-primary/20 group-hover:to-secondary/20">
+                    <Icon className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="mt-5 text-lg font-semibold tracking-tight">{industry.name}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{industry.description}</p>
+                  <h3 className="mt-5 font-display text-lg font-semibold tracking-tight">
+                    {industry.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {industry.description}
+                  </p>
                 </div>
               </StaggerItem>
             );
