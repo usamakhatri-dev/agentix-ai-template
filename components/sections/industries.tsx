@@ -6,80 +6,80 @@ import {
   Factory,
   Banknote,
   type LucideIcon,
-} from 'lucide-react'
-import { Container } from '@/components/container'
-import { SectionHeading } from '@/components/section-heading'
-import { Stagger, StaggerItem } from '@/components/motion'
+} from 'lucide-react';
+import { Container } from '@/components/container';
+import { SectionHeading } from '@/components/section-heading';
+import { Reveal, Stagger, StaggerItem } from '@/components/motion';
 
-const industries: {
-  icon: LucideIcon
-  title: string
-  description: string
-}[] = [
+interface Industry {
+  icon: LucideIcon;
+  name: string;
+  description: string;
+}
+
+const industries: Industry[] = [
   {
     icon: ShoppingBag,
-    title: 'E-commerce',
-    description:
-      'Automate order processing, customer support, and personalized recommendations at scale.',
+    name: 'E-commerce',
+    description: 'Automate customer support, order tracking, and personalized product recommendations at scale.',
   },
   {
     icon: HeartPulse,
-    title: 'Healthcare',
-    description:
-      'Streamline patient intake, claims processing, and appointment scheduling — HIPAA compliant.',
+    name: 'Healthcare',
+    description: 'Streamline patient intake, appointment scheduling, and clinical documentation with HIPAA-compliant agents.',
   },
   {
     icon: Building2,
-    title: 'Real Estate',
-    description:
-      'Qualify leads, schedule viewings, and automate follow-ups so no deal slips through.',
+    name: 'SaaS',
+    description: 'Onboard users, handle billing inquiries, and provide technical support without expanding your team.',
   },
   {
     icon: GraduationCap,
-    title: 'Education',
-    description:
-      'Handle enrollment, student support, and content delivery with intelligent agents.',
+    name: 'Education',
+    description: 'Deliver personalized tutoring, automate grading workflows, and manage student communications.',
   },
   {
     icon: Factory,
-    title: 'Manufacturing',
-    description:
-      'Monitor supply chains, automate procurement, and predict maintenance needs.',
+    name: 'Manufacturing',
+    description: 'Monitor supply chains, automate inventory reports, and predict maintenance needs with AI agents.',
   },
   {
     icon: Banknote,
-    title: 'Finance',
-    description:
-      'Automate compliance checks, fraud detection, and customer onboarding workflows.',
+    name: 'Finance',
+    description: 'Automate fraud detection, compliance reporting, and customer financial advisory workflows securely.',
   },
-]
+];
 
 export function Industries() {
   return (
-    <section className="py-20 md:py-28">
+    <section id="industries" className="py-20 sm:py-28">
       <Container>
-        <SectionHeading
-          eyebrow="Industries"
-          title="Built for every industry"
-          description="From startups to enterprises, teams across sectors use Nexus to automate their unique workflows."
-        />
+        <Reveal>
+          <SectionHeading
+            align="center"
+            eyebrow="Industries"
+            title="Built for every industry"
+            description="Agentix AI adapts to your industry-specific needs with customizable agents and workflows."
+          />
+        </Reveal>
 
-        <Stagger className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {industries.map((industry) => (
-            <StaggerItem key={industry.title}>
-              <div className="group h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-secondary/10 text-secondary transition-transform duration-300 group-hover:scale-110">
-                  <industry.icon className="h-5 w-5" />
+        <Stagger className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {industries.map((industry) => {
+            const Icon = industry.icon;
+            return (
+              <StaggerItem key={industry.name}>
+                <div className="group h-full rounded-2xl border border-border bg-card p-6 shadow-soft transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-float">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 text-primary transition-colors group-hover:from-primary/20 group-hover:to-secondary/20">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="mt-5 text-lg font-semibold tracking-tight">{industry.name}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{industry.description}</p>
                 </div>
-                <h3 className="mb-2 text-lg font-semibold">{industry.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {industry.description}
-                </p>
-              </div>
-            </StaggerItem>
-          ))}
+              </StaggerItem>
+            );
+          })}
         </Stagger>
       </Container>
     </section>
-  )
+  );
 }

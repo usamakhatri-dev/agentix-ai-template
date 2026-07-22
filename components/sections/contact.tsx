@@ -1,67 +1,41 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import {
-  Send,
-  CheckCircle2,
-  AlertCircle,
-  Loader2,
-  Mail,
-  Phone,
-  MapPin,
-  CalendarClock,
-  ShieldCheck,
-} from 'lucide-react'
-import { Container } from '@/components/container'
-import { SectionHeading } from '@/components/section-heading'
-import { Reveal } from '@/components/motion'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import { cn } from '@/lib/utils'
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Container } from '@/components/container';
+import { SectionHeading } from '@/components/section-heading';
+import { Reveal } from '@/components/motion';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
-const EASE = [0.22, 1, 0.36, 1] as const
+const EASE = [0.22, 1, 0.36, 1] as const;
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-type Status = 'idle' | 'submitting' | 'success' | 'error'
+type Status = 'idle' | 'submitting' | 'success' | 'error';
 
-type FormData = {
-  name: string
-  email: string
-  company: string
-  message: string
+interface FormData {
+  name: string;
+  email: string;
+  company: string;
+  message: string;
 }
 
-type Errors = Partial<Record<keyof FormData, string>>
+interface FormErrors {
+  name?: string;
+  email?: string;
+  message?: string;
+}
 
 const contactInfo = [
-  {
-    icon: Mail,
-    label: 'Email',
-    value: 'hello@nexus.io',
-    description: 'We reply within 24 hours',
-  },
-  {
-    icon: Phone,
-    label: 'Phone',
-    value: '+1 (555) 123-4567',
-    description: 'Mon–Fri, 9am–6pm PT',
-  },
-  {
-    icon: MapPin,
-    label: 'Office',
-    value: 'San Francisco, CA',
-    description: '535 Mission St, 14th Floor',
-  },
-  {
-    icon: CalendarClock,
-    label: 'Book a demo',
-    value: '30-min walkthrough',
-    description: 'See Nexus in action',
-  },
-]
+  { icon: Mail, label: 'Email', value: 'hello@agentix.ai', href: 'mailto:hello@agentix.ai' },
+  { icon: Phone, label: 'Phone', value: '+1 (555) 123-4567', href: 'tel:+15551234567' },
+  { icon: MapPin, label: 'Office', value: '500 Market Street, San Francisco, CA 94105', href: '#' },
+];
 
 export function Contact() {
   const [form, setForm] = useState<FormData>({
@@ -69,92 +43,107 @@ export function Contact() {
     email: '',
     company: '',
     message: '',
-  })
-  const [errors, setErrors] = useState<Errors>({})
-  const [status, setStatus] = useState<Status>('idle')
+  });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [status, setStatus] = useState<Status>('idle');
 
   const validate = (): boolean => {
-    const next: Errors = {}
-    if (!form.name.trim()) next.name = 'Name is required'
+    const newErrors: FormErrors = {};
+    if (!form.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
     if (!form.email.trim()) {
-      next.email = 'Email is required'
+      newErrors.email = 'Email is required';
     } else if (!EMAIL_RE.test(form.email)) {
-      next.email = 'Please enter a valid email address'
+      newErrors.email = 'Please enter a valid email address';
     }
     if (!form.message.trim()) {
-      next.message = 'Message is required'
-    } else if (form.message.trim().length < 10) {
-      next.message = 'Message must be at least 10 characters'
+      newErrors.message = 'Message is required';
     }
-    setErrors(next)
-    return Object.keys(next).length === 0
-  }
-
-  const handleChange = (
-    field: keyof FormData,
-    value: string
-  ) => {
-    setForm((prev) => ({ ...prev, [field]: value }))
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }))
-    }
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!validate()) return
-    setStatus('submitting')
+    e.preventDefault();
+    if (!validate()) return;
+    setStatus('submitting');
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1200))
-      setStatus('success')
-      setForm({ name: '', email: '', company: '', message: '' })
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      setStatus('success');
+      setForm({ name: '', email: '', company: '', message: '' });
     } catch {
-      setStatus('error')
+      setStatus('error');
     }
-  }
+  };
+
+  const handleChange = (field: keyof FormData, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    if (errors[field as keyof FormErrors]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
+  };
 
   return (
-    <section className="py-20 md:py-28">
+    <section id="contact" className="py-20 sm:py-28">
       <Container>
-        <SectionHeading
-          eyebrow="Contact"
-          title="Let's talk"
-          description="Have a question or want to see a demo? Send us a message and we'll get back to you within 24 hours."
-        />
+        <Reveal>
+          <SectionHeading
+            align="center"
+            eyebrow="Contact"
+            title="Get in touch with our team"
+            description="Have questions about Agentix AI? Want a personalized demo? Send us a message and we will get back to you within 24 hours."
+          />
+        </Reveal>
 
-        <div className="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-2">
+        <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-2">
           {/* Left: contact info */}
           <Reveal>
-            <div className="flex flex-col gap-4">
-              {contactInfo.map((info) => (
-                <div
-                  key={info.label}
-                  className="flex items-start gap-4 rounded-2xl border border-border bg-card p-5"
-                >
-                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <info.icon className="h-5 w-5" />
-                  </span>
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                      {info.label}
-                    </p>
-                    <p className="mt-0.5 text-sm font-semibold">{info.value}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {info.description}
-                    </p>
-                  </div>
+            <div className="flex h-full flex-col justify-between">
+              <div>
+                <h3 className="text-xl font-semibold tracking-tight">Contact information</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Reach out through any of the channels below. Our team is available Monday through Friday, 9am to 6pm PT.
+                </p>
+
+                <div className="mt-8 space-y-5">
+                  {contactInfo.map((info) => {
+                    const Icon = info.icon;
+                    return (
+                      <a
+                        key={info.label}
+                        href={info.href}
+                        className="flex items-start gap-4 group"
+                      >
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-primary transition-colors group-hover:border-primary/30 group-hover:bg-primary/5">
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                            {info.label}
+                          </div>
+                          <div className="mt-0.5 text-sm font-medium">{info.value}</div>
+                        </div>
+                      </a>
+                    );
+                  })}
                 </div>
-              ))}
-              <div className="flex items-center gap-2 rounded-2xl border border-border bg-emerald-500/5 p-4 text-sm text-muted-foreground">
-                <ShieldCheck className="h-5 w-5 text-emerald-500" />
-                Your data is protected with SOC 2 Type II compliance and end-to-end encryption.
+              </div>
+
+              {/* Response time badge */}
+              <div className="mt-8 inline-flex items-center gap-2 rounded-xl border border-border bg-muted/20 px-4 py-3">
+                <div className="flex h-2 w-2">
+                  <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-green-500 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+                </div>
+                <span className="text-sm text-muted-foreground">Average response time: under 2 hours</span>
               </div>
             </div>
           </Reveal>
 
           {/* Right: form */}
           <Reveal delay={0.1}>
-            <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-8">
               <AnimatePresence mode="wait">
                 {status === 'success' ? (
                   <motion.div
@@ -163,21 +152,23 @@ export function Contact() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4, ease: EASE }}
-                    className="flex flex-col items-center justify-center py-16 text-center"
+                    className="flex h-full min-h-[300px] flex-col items-center justify-center text-center"
                   >
-                    <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 text-green-500">
                       <CheckCircle2 className="h-8 w-8" />
-                    </span>
-                    <h3 className="text-xl font-semibold">Message sent!</h3>
+                    </div>
+                    <h3 className="mt-4 text-xl font-semibold tracking-tight">Message sent!</h3>
                     <p className="mt-2 text-sm text-muted-foreground">
-                      Thanks for reaching out. We will get back to you within 24 hours.
+                      Thank you for reaching out. Our team will get back to you within 24 hours.
                     </p>
-                    <button
+                    <Button
+                      variant="outline"
+                      size="default"
+                      className="mt-6"
                       onClick={() => setStatus('idle')}
-                      className="mt-6 text-sm font-medium text-primary hover:underline"
                     >
                       Send another message
-                    </button>
+                    </Button>
                   </motion.div>
                 ) : (
                   <motion.form
@@ -187,108 +178,104 @@ export function Contact() {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3, ease: EASE }}
                     onSubmit={handleSubmit}
+                    className="space-y-5"
                     noValidate
-                    className="flex flex-col gap-5"
                   >
                     {/* Name */}
-                    <div className="flex flex-col gap-1.5">
-                      <Label htmlFor="name">Name *</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Name</Label>
                       <Input
                         id="name"
+                        type="text"
+                        placeholder="Jane Doe"
                         value={form.name}
                         onChange={(e) => handleChange('name', e.target.value)}
-                        placeholder="Jane Doe"
-                        aria-invalid={!!errors.name}
-                        className={cn(errors.name && 'border-red-500')}
+                        className={cn(errors.name && 'border-destructive')}
+                        disabled={status === 'submitting'}
                       />
                       {errors.name && (
-                        <p className="flex items-center gap-1 text-xs text-red-500">
-                          <AlertCircle className="h-3 w-3" />
-                          {errors.name}
-                        </p>
+                        <p className="text-xs text-destructive">{errors.name}</p>
                       )}
                     </div>
 
                     {/* Email */}
-                    <div className="flex flex-col gap-1.5">
-                      <Label htmlFor="email">Email *</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
                       <Input
                         id="email"
                         type="email"
+                        placeholder="jane@company.com"
                         value={form.email}
                         onChange={(e) => handleChange('email', e.target.value)}
-                        placeholder="jane@company.com"
-                        aria-invalid={!!errors.email}
-                        className={cn(errors.email && 'border-red-500')}
+                        className={cn(errors.email && 'border-destructive')}
+                        disabled={status === 'submitting'}
                       />
                       {errors.email && (
-                        <p className="flex items-center gap-1 text-xs text-red-500">
-                          <AlertCircle className="h-3 w-3" />
-                          {errors.email}
-                        </p>
+                        <p className="text-xs text-destructive">{errors.email}</p>
                       )}
                     </div>
 
-                    {/* Company */}
-                    <div className="flex flex-col gap-1.5">
+                    {/* Company (optional) */}
+                    <div className="space-y-2">
                       <Label htmlFor="company">
-                        Company{' '}
-                        <span className="text-muted-foreground">(optional)</span>
+                        Company <span className="text-muted-foreground">(optional)</span>
                       </Label>
                       <Input
                         id="company"
+                        type="text"
+                        placeholder="Acme Inc."
                         value={form.company}
                         onChange={(e) => handleChange('company', e.target.value)}
-                        placeholder="Acme Corp"
+                        disabled={status === 'submitting'}
                       />
                     </div>
 
                     {/* Message */}
-                    <div className="flex flex-col gap-1.5">
-                      <Label htmlFor="message">Message *</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="message">Message</Label>
                       <Textarea
                         id="message"
+                        placeholder="Tell us about your use case..."
                         value={form.message}
                         onChange={(e) => handleChange('message', e.target.value)}
-                        placeholder="Tell us what you'd like to automate..."
-                        rows={5}
-                        aria-invalid={!!errors.message}
-                        className={cn(errors.message && 'border-red-500')}
+                        className={cn(errors.message && 'border-destructive')}
+                        disabled={status === 'submitting'}
                       />
                       {errors.message && (
-                        <p className="flex items-center gap-1 text-xs text-red-500">
-                          <AlertCircle className="h-3 w-3" />
-                          {errors.message}
-                        </p>
+                        <p className="text-xs text-destructive">{errors.message}</p>
                       )}
                     </div>
 
+                    {/* Error message */}
                     {status === 'error' && (
-                      <p className="flex items-center gap-1 text-sm text-red-500">
-                        <AlertCircle className="h-4 w-4" />
-                        Something went wrong. Please try again.
-                      </p>
+                      <div className="flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3">
+                        <AlertCircle className="h-4 w-4 shrink-0 text-destructive" />
+                        <span className="text-sm text-destructive">
+                          Something went wrong. Please try again.
+                        </span>
+                      </div>
                     )}
 
-                    <button
+                    {/* Submit */}
+                    <Button
                       type="submit"
+                      variant="brand"
+                      size="default"
+                      className="w-full"
                       disabled={status === 'submitting'}
-                      className={cn(
-                        'inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60'
-                      )}
                     >
                       {status === 'submitting' ? (
                         <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                           Sending...
                         </>
                       ) : (
                         <>
                           <Send className="h-4 w-4" />
-                          Send message
+                          Send Message
                         </>
                       )}
-                    </button>
+                    </Button>
                   </motion.form>
                 )}
               </AnimatePresence>
@@ -297,5 +284,5 @@ export function Contact() {
         </div>
       </Container>
     </section>
-  )
+  );
 }

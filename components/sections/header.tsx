@@ -1,98 +1,128 @@
 'use client';
 
-import * as React from 'react';
-import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Moon, Sun, Sparkles, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Sparkles, Menu, X, Sun, Moon } from 'lucide-react';
 import { Container } from '@/components/container';
+import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
 import { navLinks } from '@/data/navigation';
 
-const EASE = [0.22, 1, 0.36, 1] as const;
-
 export function Header() {
-  const [scrolled, setScrolled] = React.useState(false);
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  React.useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [mobileOpen]);
-
   return (
     <header
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-all duration-300',
-        scrolled ? 'border-b border-border/60 bg-background/80 backdrop-blur-xl shadow-soft' : 'bg-transparent',
+        scrolled
+          ? 'border-b border-border bg-background/80 backdrop-blur-md shadow-soft'
+          : 'border-b border-transparent bg-transparent',
       )}
     >
-      <Container className="flex h-16 items-center justify-between gap-4 md:h-18">
-        <Link href="#" className="flex items-center gap-2.5 shrink-0" aria-label="Agentix AI home">
-          <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary via-secondary to-accent shadow-glow">
-            <Sparkles className="h-5 w-5 text-white" />
-          </span>
-          <span className="font-display text-lg font-semibold tracking-tight">
-            Agentix<span className="text-primary"> AI</span>
-          </span>
-        </Link>
+      <Container>
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <a href="#" className="flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary text-white shadow-glow">
+              <Sparkles className="h-5 w-5" />
+            </div>
+            <span className="text-lg font-bold tracking-tight font-display">Agentix AI</span>
+          </a>
 
-        <nav className="hidden lg:flex items-center gap-0.5" aria-label="Primary">
-          {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+          {/* Desktop nav */}
+          <nav className="hidden items-center gap-8 md:flex">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
 
-        <div className="hidden lg:flex items-center gap-2">
-          <button onClick={toggleTheme} aria-label="Toggle dark mode" aria-pressed={theme === 'dark'} className="flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
-            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
-          <Button variant="ghost" size="sm" asChild><Link href="#cta">Login</Link></Button>
-          <Button variant="brand" size="sm" asChild><Link href="#cta">Start Free</Link></Button>
-        </div>
+          {/* Desktop actions */}
+          <div className="hidden items-center gap-2 md:flex">
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+            <Button variant="ghost" size="default">
+              Login
+            </Button>
+            <Button variant="brand" size="default">
+              Start Free
+            </Button>
+          </div>
 
-        <div className="flex lg:hidden items-center gap-1">
-          <button onClick={toggleTheme} aria-label="Toggle dark mode" aria-pressed={theme === 'dark'} className="flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
-            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
-          <button onClick={() => setMobileOpen((v) => !v)} aria-label="Toggle menu" aria-expanded={mobileOpen} className="flex h-9 w-9 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted">
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          {/* Mobile actions */}
+          <div className="flex items-center gap-2 md:hidden">
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+            <button
+              onClick={() => setMobileOpen((prev) => !prev)}
+              aria-label="Toggle menu"
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
       </Container>
 
+      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
-          <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="lg:hidden fixed inset-0 top-16 bg-background/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-            <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25, ease: EASE }} className="lg:hidden absolute inset-x-0 top-16 border-t border-border/60 bg-background/95 backdrop-blur-xl shadow-float">
-              <Container className="py-4 flex flex-col gap-0.5">
-                {navLinks.map((link, i) => (
-                  <motion.div key={link.href} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.04 * i }}>
-                    <Link href={link.href} onClick={() => setMobileOpen(false)} className="group flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
-                      {link.label}
-                      <ChevronRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
-                    </Link>
-                  </motion.div>
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden border-b border-border bg-background md:hidden"
+          >
+            <Container>
+              <nav className="flex flex-col gap-1 py-4">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  >
+                    {link.label}
+                  </a>
                 ))}
-                <div className="flex flex-col gap-2 pt-3 mt-2 border-t border-border/60">
-                  <Button variant="outline" size="sm" asChild><Link href="#cta" onClick={() => setMobileOpen(false)}>Login</Link></Button>
-                  <Button variant="brand" size="sm" asChild><Link href="#cta" onClick={() => setMobileOpen(false)}>Start Free</Link></Button>
+                <div className="mt-2 flex flex-col gap-2 px-1">
+                  <Button variant="outline" size="default">
+                    Login
+                  </Button>
+                  <Button variant="brand" size="default">
+                    Start Free
+                  </Button>
                 </div>
-              </Container>
-            </motion.div>
-          </>
+              </nav>
+            </Container>
+          </motion.div>
         )}
       </AnimatePresence>
     </header>

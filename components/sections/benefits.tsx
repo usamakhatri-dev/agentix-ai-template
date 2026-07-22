@@ -1,77 +1,75 @@
-import {
-  Clock,
-  DollarSign,
-  TrendingUp,
-  Shield,
-  type LucideIcon,
-} from 'lucide-react'
-import { Container } from '@/components/container'
-import { SectionHeading } from '@/components/section-heading'
-import { Stagger, StaggerItem } from '@/components/motion'
+import { Clock, DollarSign, TrendingUp, Shield, type LucideIcon } from 'lucide-react';
+import { Container } from '@/components/container';
+import { SectionHeading } from '@/components/section-heading';
+import { Reveal, Stagger, StaggerItem } from '@/components/motion';
 
-const benefits: {
-  icon: LucideIcon
-  stat: string
-  label: string
-  description: string
-}[] = [
+interface Benefit {
+  icon: LucideIcon;
+  stat: string;
+  label: string;
+  description: string;
+}
+
+const benefits: Benefit[] = [
   {
     icon: Clock,
-    stat: '40+ hrs',
+    stat: '40h',
     label: 'Saved per week',
-    description:
-      'Automate repetitive tasks and give your team their time back to focus on high-impact work.',
+    description: 'Free your team from repetitive tasks and let them focus on high-impact work that drives growth.',
   },
   {
     icon: DollarSign,
-    stat: '62%',
-    label: 'Lower costs',
-    description:
-      'Cut operational overhead by automating support, ops, and admin workflows end-to-end.',
+    stat: '60%',
+    label: 'Cost reduction',
+    description: 'Cut operational costs by consolidating tools and automating workflows across your organization.',
   },
   {
     icon: TrendingUp,
-    stat: '3.4x',
-    label: 'Faster growth',
-    description:
-      'Scale output without scaling headcount. Handle 10x the volume with the same team.',
+    stat: '3x',
+    label: 'Productivity boost',
+    description: 'AI agents work around the clock, handling tasks in seconds that used to take hours.',
   },
   {
     icon: Shield,
     stat: '99.9%',
-    label: 'Uptime SLA',
-    description:
-      'Enterprise-grade reliability with SOC 2 compliance and end-to-end encryption.',
+    label: 'Uptime guarantee',
+    description: 'Enterprise-grade infrastructure ensures your agents are always available when you need them.',
   },
-]
+];
 
 export function Benefits() {
   return (
-    <section className="border-y border-border bg-muted/20 py-20 md:py-28">
+    <section id="benefits" className="border-y border-border bg-muted/20 py-20 sm:py-28">
       <Container>
-        <SectionHeading
-          eyebrow="Benefits"
-          title="Real results, not just promises"
-          description="Teams using Nexus see measurable impact within the first 30 days."
-        />
+        <Reveal>
+          <SectionHeading
+            align="center"
+            eyebrow="Benefits"
+            title="Real results, real impact"
+            description="Businesses using Agentix AI see measurable improvements within the first month of deployment."
+          />
+        </Reveal>
 
         <Stagger className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {benefits.map((benefit) => (
-            <StaggerItem key={benefit.label}>
-              <div className="group h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110">
-                  <benefit.icon className="h-5 w-5" />
+          {benefits.map((benefit) => {
+            const Icon = benefit.icon;
+            return (
+              <StaggerItem key={benefit.label}>
+                <div className="h-full rounded-2xl border border-border bg-card p-6 text-center shadow-soft transition-all hover:-translate-y-1 hover:shadow-float">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10 text-primary">
+                    <Icon className="h-7 w-7" />
+                  </div>
+                  <div className="mt-5 text-4xl font-bold tracking-tight font-display bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                    {benefit.stat}
+                  </div>
+                  <div className="mt-1 text-sm font-semibold">{benefit.label}</div>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{benefit.description}</p>
                 </div>
-                <p className="text-3xl font-bold tracking-tight">{benefit.stat}</p>
-                <p className="mt-1 text-sm font-medium">{benefit.label}</p>
-                <p className="mt-3 text-sm text-muted-foreground">
-                  {benefit.description}
-                </p>
-              </div>
-            </StaggerItem>
-          ))}
+              </StaggerItem>
+            );
+          })}
         </Stagger>
       </Container>
     </section>
-  )
+  );
 }

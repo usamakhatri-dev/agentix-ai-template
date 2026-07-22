@@ -1,98 +1,97 @@
-'use client'
+'use client';
 
-import { motion } from 'framer-motion'
-import { TrendingUp, Clock, Users, DollarSign } from 'lucide-react'
-import { Container } from '@/components/container'
-import { SectionHeading } from '@/components/section-heading'
-import { Reveal } from '@/components/motion'
+import { motion } from 'framer-motion';
+import { TrendingUp, Clock, Users, DollarSign, ArrowRight, type LucideIcon } from 'lucide-react';
+import { Container } from '@/components/container';
+import { Button } from '@/components/ui/button';
+import { Reveal } from '@/components/motion';
 
-const EASE = [0.22, 1, 0.36, 1] as const
+const EASE = [0.22, 1, 0.36, 1] as const;
 
-const stats = [
-  { icon: TrendingUp, value: '+42%', label: 'Revenue growth' },
-  { icon: Clock, value: '38 hrs', label: 'Saved per week' },
-  { icon: Users, value: '12k+', label: 'Customers served' },
-  { icon: DollarSign, value: '$1.2M', label: 'Cost saved annually' },
-]
+interface CaseStat {
+  icon: LucideIcon;
+  value: string;
+  label: string;
+}
+
+const stats: CaseStat[] = [
+  { icon: TrendingUp, value: '+34.8%', label: 'Revenue increase' },
+  { icon: Clock, value: '80%', label: 'Faster response times' },
+  { icon: Users, value: '3x', label: 'Customer capacity' },
+  { icon: DollarSign, value: '$40K', label: 'Annual savings' },
+];
 
 export function CaseStudy() {
   return (
-    <section className="relative overflow-hidden py-20 md:py-28">
-      {/* Background */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 dot-bg" />
-        <div className="absolute -left-20 top-10 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
-        <div className="absolute -right-20 bottom-10 h-72 w-72 rounded-full bg-accent/20 blur-3xl" />
-      </div>
-
+    <section className="py-20 sm:py-28">
       <Container>
-        <SectionHeading
-          eyebrow="Case study"
-          title="How Acme Corp scaled 3x without hiring"
-          description="See how a 50-person team automated their entire support and ops workflow with Nexus."
-        />
-
         <Reveal>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: EASE }}
-            className="mt-12 overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-card via-card to-primary/5 p-8 md:p-12"
-          >
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-              {/* Left: story */}
+          <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/5 via-card to-secondary/5 p-8 shadow-premium sm:p-12 lg:p-16">
+            {/* Dot background */}
+            <div
+              className="absolute inset-0 -z-10 opacity-[0.04]"
+              style={{
+                backgroundImage: 'radial-gradient(hsl(var(--foreground)) 1px, transparent 1px)',
+                backgroundSize: '24px 24px',
+              }}
+            />
+
+            {/* Gradient blobs */}
+            <div className="absolute -left-20 -top-20 -z-10 h-64 w-64 rounded-full bg-primary/15 blur-3xl animate-pulse-glow" />
+            <div
+              className="absolute -bottom-20 -right-20 -z-10 h-72 w-72 rounded-full bg-secondary/15 blur-3xl animate-pulse-glow"
+              style={{ animationDelay: '2s' }}
+            />
+
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center">
+              {/* Left: content */}
               <div>
-                <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                  Customer story
+                <span className="inline-block text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                  Case Study
                 </span>
-                <h3 className="mt-4 text-2xl font-semibold tracking-tight">
-                  &ldquo;Nexus paid for itself in the first week.&rdquo;
-                </h3>
-                <p className="mt-4 text-muted-foreground">
-                  Acme Corp was drowning in support tickets and manual ops work.
-                  Within 30 days of deploying Nexus, they automated 80% of their
-                  support workflow, cut response times by 4x, and freed their team
-                  to focus on product — not busywork.
+                <h2 className="mt-3 text-3xl font-bold tracking-tight text-balance font-display sm:text-4xl">
+                  How Nebula scaled support to 50K customers
+                </h2>
+                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                  Nebula deployed Agentix AI to automate their customer support operations. Within three months, they cut response times by 80%, increased CSAT from 82% to 97%, and scaled to handle 50,000 customers without expanding their team.
                 </p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-lg font-semibold text-primary-foreground">
-                    A
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Sarah Chen</p>
-                    <p className="text-xs text-muted-foreground">
-                      VP of Operations, Acme Corp
-                    </p>
-                  </div>
+
+                <div className="mt-8">
+                  <Button variant="brand" size="default">
+                    Read full case study
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
 
-              {/* Right: stats grid */}
+              {/* Right: stats */}
               <div className="grid grid-cols-2 gap-4">
-                {stats.map((stat, i) => (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, ease: EASE, delay: i * 0.1 }}
-                    className="rounded-2xl border border-border bg-background/60 p-5 backdrop-blur"
-                  >
-                    <stat.icon className="mb-3 h-6 w-6 text-primary" />
-                    <p className="text-3xl font-bold tracking-tight">
-                      {stat.value}
-                    </p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {stat.label}
-                    </p>
-                  </motion.div>
-                ))}
+                {stats.map((stat, i) => {
+                  const Icon = stat.icon;
+                  return (
+                    <motion.div
+                      key={stat.label}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, ease: EASE, delay: i * 0.1 }}
+                      className="rounded-2xl border border-border bg-card/80 p-5 shadow-soft backdrop-blur-sm"
+                    >
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 text-primary">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div className="mt-4 text-3xl font-bold tracking-tight font-display bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                        {stat.value}
+                      </div>
+                      <div className="mt-1 text-sm text-muted-foreground">{stat.label}</div>
+                    </motion.div>
+                  );
+                })}
               </div>
             </div>
-          </motion.div>
+          </div>
         </Reveal>
       </Container>
     </section>
-  )
+  );
 }
