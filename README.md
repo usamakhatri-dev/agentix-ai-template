@@ -1,156 +1,116 @@
-# Agentix AI — Premium SaaS Landing Page Template
+# Agentix AI — Premium Next.js SaaS Template
 
-[![Open in Bolt](https://bolt.new/static/open-in-bolt.svg)](https://bolt.new/~/sb1-rsqz4vhy)
-
-A production-ready, conversion-optimized marketing landing page for an AI automation SaaS product. Built with Next.js 13 (App Router), TypeScript, Tailwind CSS, shadcn/ui, and Framer Motion. Designed to the standard of premium SaaS sites like Linear, Vercel, Notion, and Stripe.
+A production-ready, fully responsive SaaS template for AI automation platforms. Built with Next.js 15, React 19, Tailwind CSS, and Framer Motion. Designed for marketplace distribution and long-term maintainability.
 
 ## Features
 
-- **Conversion-focused sections** — Hero, social proof, features, how-it-works, industries, case study, testimonials, pricing, FAQ, final CTA, contact form, and footer.
-- **Enterprise-grade trust & social proof** — animated stat counters, company logos, press mentions, security badges, and a feature comparison table.
-- **Premium pricing experience** — monthly/yearly toggle with animated price transitions, highlighted "Most Popular" plan, money-back guarantee badges, and a dedicated enterprise CTA block.
-- **Dark / light theme** — system-aware with manual toggle, no flash of incorrect theme (FOUC) via an inline boot script.
-- **Accessibility-first** — semantic landmarks, keyboard-navigable components, visible focus states, ARIA labels, and form validation with descriptive error messages.
-- **SEO-complete** — metadata, Open Graph, Twitter cards, canonical URL, `robots.txt`, `sitemap.xml`, JSON-LD structured data (Organization + SoftwareApplication), web manifest, and SVG/favicon icons.
-- **Performance-tuned** — `next/font` with `display: swap`, lazy-loaded images, `prefers-reduced-motion` support, and optimized animations.
-- **Responsive** — mobile-first layout from 320px to ultrawide.
+- **17 content sections** — Hero, Social Proof, Features, How It Works, Showcase, Benefits, Industries, Testimonials, Case Study, Pricing, FAQ, Final CTA, Contact, Footer
+- **Dark / Light mode** — system-aware with FOUC prevention via inline script
+- **Premium animations** — scroll reveals, stagger grids, floating cards, animated dashboard mockup
+- **Fully responsive** — mobile-first design with breakpoints from 320px to 1920px+
+- **SEO optimized** — static metadata, OpenGraph, Twitter cards, robots.txt, sitemap.xml, manifest
+- **Accessible** — skip link, semantic HTML, ARIA labels, keyboard navigation, reduced-motion support
+- **Type-safe** — strict TypeScript throughout
+- **Zero runtime dependencies for data** — all content in typed data files for easy customization
 
 ## Tech Stack
 
-| Layer       | Technology                                   |
-| ----------- | -------------------------------------------- |
-| Framework   | Next.js 13 (App Router)                      |
-| Language    | TypeScript 5                                 |
-| Styling     | Tailwind CSS 3 + CSS variables               |
-| UI          | shadcn/ui (Radix primitives)                 |
-| Animation   | Framer Motion                                |
-| Icons       | lucide-react                                 |
-| Fonts       | Inter (body) + Sora (display) via `next/font`|
-| Backend     | Supabase (optional, pre-provisioned)         |
+| Category | Technology |
+|----------|-----------|
+| Framework | Next.js 15 (App Router) |
+| UI | React 19, Tailwind CSS 3.4 |
+| Animation | Framer Motion 11 |
+| Icons | Lucide React |
+| Primitives | Radix UI (Accordion, Label, Switch, Slot) |
+| Fonts | Inter (body), Sora (display) — via next/font |
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js 18.17+ (or 20+)
-- npm 9+ (or pnpm / yarn — commands below use npm)
-
-### Installation
-
 ```bash
 npm install
-```
-
-### Development
-
-```bash
 npm run dev
 ```
 
-The dev server starts at `http://localhost:3000`.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Production Build
+## Build
 
 ```bash
 npm run build
-npm start
-```
-
-### Lint & Type Check
-
-```bash
-npm run lint
-npm run typecheck
 ```
 
 ## Project Structure
 
 ```
-app/
-  globals.css         # Tailwind layers, design tokens, utilities
-  layout.tsx          # Root layout, SEO metadata, structured data, fonts
-  page.tsx            # Landing page composition
-  robots.ts           # robots.txt route
-  sitemap.ts          # sitemap.xml route
-  icon.svg            # SVG favicon
-components/
-  container.tsx       # Max-width wrapper
-  motion.tsx          # Reveal / Stagger animation primitives
-  section-heading.tsx # Reusable section header
-  theme-provider.tsx  # Theme context + hook
-  sections/           # Page sections (hero, pricing, footer, etc.)
-  ui/                 # shadcn/ui primitives
-hooks/
-  use-toast.ts        # Toast hook
-lib/
-  utils.ts            # cn() helper
-public/
-  manifest.webmanifest
+├── app/
+│   ├── globals.css          # Tailwind layers + design tokens
+│   ├── layout.tsx            # Root layout, fonts, metadata
+│   ├── page.tsx              # Home page — composes all sections
+│   ├── icon.svg              # Favicon
+│   ├── manifest.ts           # PWA manifest
+│   ├── robots.ts             # robots.txt
+│   └── sitemap.ts            # sitemap.xml
+├── components/
+│   ├── container.tsx         # Max-width wrapper
+│   ├── motion.tsx            # Reveal, Stagger, StaggerItem
+│   ├── section-heading.tsx   # Reusable section header
+│   ├── theme-provider.tsx    # Dark/light context
+│   ├── sections/             # 17 page sections
+│   └── ui/                   # Button, Input, Textarea, Label, Switch, Accordion
+├── data/
+│   ├── features.ts           # Feature cards content
+│   ├── hero.ts               # Trusted-by logos
+│   ├── navigation.ts         # Nav links
+│   └── testimonials.ts       # Testimonial carousel content
+├── lib/
+│   └── utils.ts              # cn() class merge utility
+├── next.config.ts
+├── tailwind.config.ts
+├── tsconfig.json
+└── package.json
 ```
 
 ## Customization
 
-### Branding
+### Content
 
-- **Colors**: edit the CSS variables in `app/globals.css` (`--primary`, `--secondary`, `--accent`, etc.). Both light and dark themes are defined there.
-- **Fonts**: swap the `Inter` / `Sora` imports in `app/layout.tsx` and update the `--font-sans` / `--font-display` variables.
-- **Logo**: replace the `Sparkles` icon and "Agentix AI" wordmark in `components/sections/header.tsx` and `footer.tsx`.
-- **Copy**: all marketing copy lives inline in the section components under `components/sections/`.
+All text content lives in `data/` and the section component files. Edit these to rebrand:
 
-### Sections
+- `data/navigation.ts` — header nav links
+- `data/features.ts` — feature cards
+- `data/testimonials.ts` — testimonial carousel
+- `data/hero.ts` — trusted-by logos
 
-Each section is a self-contained component in `components/sections/`. To reorder, edit the imports and JSX in `app/page.tsx`. To remove a section, delete its import and JSX entry — no other wiring required.
+### Colors
 
-### SEO
+Design tokens are CSS variables in `app/globals.css` (both `:root` and `.dark`). Update the HSL values to change the palette:
 
-- Update `siteUrl`, `title`, `description`, and social handles in `app/layout.tsx`.
-- Replace `/og-image.png` (1200×630) and icon assets in `app/` and `public/`.
-- Update the `sameAs` and `aggregateRating` fields in the JSON-LD structured data.
-- Edit `app/robots.ts` and `app/sitemap.ts` to match your domain.
-
-### Pricing
-
-Pricing plans, features, and the comparison table are defined in the `plans`, `featureIcons`, `planAvailability`, and `comparisonRows` arrays at the top of `components/sections/pricing.tsx`. Update these arrays to change plans, prices, or feature availability — the UI updates automatically.
-
-### Contact Form
-
-The contact form (`components/sections/contact.tsx`) currently simulates submission with a timeout. To connect it to a real backend, replace the `await new Promise(...)` call in `handleSubmit` with a fetch to your API or Supabase Edge Function.
-
-## Environment Variables
-
-The project ships with a pre-provisioned Supabase instance. The following variables are pre-populated in `.env` and the hosted environment — no manual configuration is required.
-
-| Variable                   | Purpose                                  |
-| -------------------------- | ---------------------------------------- |
-| `SUPABASE_URL`             | Supabase project URL                     |
-| `SUPABASE_ANON_KEY`        | Supabase anon (public) key               |
-| `SUPABASE_SERVICE_ROLE_KEY`| Supabase service role key (server only)  |
-| `SUPABASE_DB_URL`          | Direct Postgres connection string        |
-
-> Never expose `SUPABASE_SERVICE_ROLE_KEY` to the client. Keep it in server-only code or Edge Functions.
-
-## Deployment
-
-The project is configured for Netlify (see `netlify.toml`) and is also deployable to Vercel or any Next.js-compatible host.
-
-```bash
-npm run build
+```css
+:root {
+  --primary: 199 89% 48%;    /* sky blue */
+  --secondary: 172 66% 51%;  /* teal */
+  --accent: 43 96% 56%;      /* amber */
+}
 ```
 
-The build outputs static pages where possible and server-rendered routes where required.
+### Fonts
 
-## Accessibility
+Fonts are loaded via `next/font/google` in `app/layout.tsx`. Replace `Inter` and `Sora` with any Google Font.
 
-- WCAG AA color contrast in both themes.
-- All interactive elements are keyboard reachable with visible focus rings.
-- Form fields have associated `<Label>` elements and `aria-describedby` error messaging.
-- Decorative icons are marked `aria-hidden`; meaningful icons have `aria-label`.
-- `prefers-reduced-motion` disables non-essential animation.
+## Production Deployment
+
+This template is configured for static export. `next.config.ts` sets `images: { unoptimized: true }` for compatibility with static hosts (Netlify, Vercel, Cloudflare Pages).
+
+### Excluded from release
+
+```
+node_modules/
+.next/
+.git/
+*.log
+.env
+```
 
 ## License
 
-This template is provided for commercial use. Replace this section with your chosen license before distribution.
-
----
-
-Built with care. Ship something beautiful.
+MIT

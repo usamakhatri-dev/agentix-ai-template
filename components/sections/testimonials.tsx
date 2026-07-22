@@ -1,20 +1,17 @@
 'use client';
 
 import * as React from 'react';
-import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Container } from '@/components/container';
 import { SectionHeading } from '@/components/section-heading';
 import { Reveal } from '@/components/motion';
-import { cn } from '@/lib/utils';
 import { testimonials } from '@/data/testimonials';
-
-const EASE = [0.22, 1, 0.36, 1] as const;
+import { cn } from '@/lib/utils';
 
 export function Testimonials() {
-  const [index, setIndex] = React.useState(0);
-  const [direction, setDirection] = React.useState(0);
   const [perView, setPerView] = React.useState(3);
+  const [start, setStart] = React.useState(0);
 
   React.useEffect(() => {
     const update = () => {
@@ -34,93 +31,69 @@ export function Testimonials() {
     };
   }, []);
 
-  const maxIndex = Math.max(0, testimonials.length - perView);
-
-  const go = (dir: number) => {
-    setDirection(dir);
-    setIndex((i) => Math.min(maxIndex, Math.max(0, i + dir)));
-  };
-
-  const visible = testimonials.slice(index, index + perView);
-  while (visible.length < perView && testimonials.length >= perView) {
-    visible.push(testimonials[visible.length % testimonials.length]);
-  }
+  const maxStart = Math.max(0, testimonials.length - perView);
+  const clampedStart = Math.min(start, maxStart);
+  const visible = testimonials.slice(clampedStart, clampedStart + perView);
 
   return (
-    <section id="testimonials" className="relative py-24 sm:py-32">
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-1/2 h-96 w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary/10 blur-[140px]" />
-      </div>
+    <section id="testimonials" className="relative py-24 sm:py-32 bg-muted/20 border-y border-border/60">
       <Container>
-        <SectionHeading
-          eyebrow="Testimonials"
-          title="Loved by teams everywhere"
-          description="From scrappy startups to global enterprises — thousands of teams trust Agentix AI to run their automations."
-        />
-
-        <div className="mt-12 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
-            <span className="font-display text-lg font-semibold">4.9/5</span>
-            <span className="text-sm text-muted-foreground">from 2,400+ reviews</span>
-          </div>
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <SectionHeading
+            eyebrow="Testimonials"
+            title="Loved by teams worldwide"
+            description="Don't take our word for it. Hear from the teams using Agentix to transform their operations."
+          />
           <div className="flex items-center gap-2">
             <button
-              onClick={() => go(-1)}
-              disabled={index === 0}
+              onClick={() => setStart((s) => Math.max(0, s - 1))}
+              disabled={clampedStart === 0}
               aria-label="Previous testimonials"
-              className="flex h-10 w-10 items-center justify-center rounded-lg border border-border/60 bg-card text-foreground shadow-soft transition-all hover:border-primary/40 hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-border/60 bg-card/50 text-muted-foreground transition-all hover:border-primary/40 hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
             <button
-              onClick={() => go(1)}
-              disabled={index >= maxIndex}
+              onClick={() => setStart((s) => Math.min(maxStart, s + 1))}
+              disabled={clampedStart === maxStart}
               aria-label="Next testimonials"
-              className="flex h-10 w-10 items-center justify-center rounded-lg border border-border/60 bg-card text-foreground shadow-soft transition-all hover:border-primary/40 hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-border/60 bg-card/50 text-muted-foreground transition-all hover:border-primary/40 hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <ChevronRight className="h-5 w-5" />
             </button>
           </div>
         </div>
 
-        <div className="mt-6 overflow-hidden">
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={index}
-              custom={direction}
-              initial={{ opacity: 0, x: direction * 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: direction * -40 }}
-              transition={{ duration: 0.4, ease: EASE }}
-              className={cn(
-                'grid gap-5',
-                perView === 3 ? 'grid-cols-3' : perView === 2 ? 'grid-cols-2' : 'grid-cols-1'
-              )}
-            >
-              {visible.map((t, i) => (
-                <div
-                  key={`${t.name}-${i}`}
-                  className="group relative h-full overflow-hidden rounded-2xl border border-border/60 bg-card/60 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-card-hover"
+        <Reveal className="mt-12 overflow-hidden">
+          <div className="grid gap-6" style={{ gridTemplateColumns: `repeat(${perView}, minmax(0, 1fr))` }}>
+            <AnimatePresence mode="wait">
+              {visible.map((t) => (
+                <motion.div
+                  key={t.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4 }}
+                  className="flex h-full flex-col rounded-2xl border border-border/60 bg-card/50 p-6 shadow-soft backdrop-blur-sm"
                 >
-                  <div aria-hidden className="pointer-events-none absolute -inset-px -z-10 rounded-2xl bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  <Quote aria-hidden className="absolute right-5 top-5 h-10 w-10 text-primary/10 transition-colors duration-300 group-hover:text-primary/20" />
-                  <div className="flex gap-0.5" aria-label={`${t.rating} out of 5 stars`}>
-                    {Array.from({ length: t.rating }).map((_, j) => (
-                      <Star key={j} aria-hidden className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  <Quote className="h-8 w-8 text-primary/20" />
+                  <div className="mt-3 flex items-center gap-0.5">
+                    {Array.from({ length: t.rating }).map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
                     ))}
                   </div>
-                  <p className="mt-4 text-sm leading-relaxed text-foreground/90">
+                  <p className="mt-4 flex-1 text-sm text-foreground/80 leading-relaxed">
                     &ldquo;{t.quote}&rdquo;
                   </p>
                   <div className="mt-6 flex items-center gap-3 border-t border-border/60 pt-4">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- static export uses unoptimized images */}
                     <img
                       src={t.avatar}
-                      alt={`Portrait of ${t.name}`}
+                      alt={t.name}
+                      width={40}
+                      height={40}
                       loading="lazy"
-                      width={44}
-                      height={44}
-                      className="h-11 w-11 rounded-full object-cover ring-2 ring-primary/20 transition-shadow duration-300 group-hover:ring-primary/40"
+                      className="h-10 w-10 rounded-full object-cover"
                     />
                     <div>
                       <div className="text-sm font-semibold">{t.name}</div>
@@ -129,26 +102,25 @@ export function Testimonials() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </motion.div>
-          </AnimatePresence>
-        </div>
+            </AnimatePresence>
+          </div>
+        </Reveal>
 
-        {/* Dots */}
-        <Reveal delay={0.1} className="mt-8 flex justify-center gap-1.5">
-          {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+        <div className="mt-8 flex items-center justify-center gap-2">
+          {Array.from({ length: maxStart + 1 }).map((_, i) => (
             <button
               key={i}
-              onClick={() => { setDirection(i > index ? 1 : -1); setIndex(i); }}
+              onClick={() => setStart(i)}
               aria-label={`Go to slide ${i + 1}`}
               className={cn(
-                'h-1.5 rounded-full transition-all duration-300',
-                i === index ? 'w-8 bg-primary' : 'w-1.5 bg-border hover:bg-muted-foreground/40'
+                'h-2 rounded-full transition-all',
+                i === clampedStart ? 'w-8 bg-primary' : 'w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50',
               )}
             />
           ))}
-        </Reveal>
+        </div>
       </Container>
     </section>
   );

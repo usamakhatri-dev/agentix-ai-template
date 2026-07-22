@@ -118,7 +118,6 @@ export function ContactForm() {
         />
 
         <div className="mx-auto mt-14 grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-5">
-          {/* Contact info */}
           <Reveal className="lg:col-span-2">
             <div className="flex h-full flex-col gap-6 rounded-2xl border border-border/60 bg-card/50 p-6 shadow-soft backdrop-blur-sm">
               <div>
@@ -158,7 +157,6 @@ export function ContactForm() {
             </div>
           </Reveal>
 
-          {/* Form */}
           <Reveal delay={0.1} className="lg:col-span-3">
             <div className="rounded-2xl border border-border/60 bg-card/60 p-6 shadow-soft backdrop-blur-sm sm:p-8">
               <AnimatePresence mode="wait">

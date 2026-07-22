@@ -23,7 +23,6 @@ import {
   Plug,
   Lock,
   HelpCircle,
-  MessageSquare,
 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -229,12 +228,12 @@ export function Pricing() {
       </div>
       <Container>
         <SectionHeading
+          align="center"
           eyebrow="Pricing"
           title="Simple, transparent pricing"
           description="Start free, upgrade when you are ready. No hidden fees, no surprises — cancel anytime."
         />
 
-        {/* Billing toggle */}
         <Reveal delay={0.1} className="mt-8 flex items-center justify-center gap-3">
           <span className={cn('text-sm font-medium transition-colors', !yearly && 'text-foreground', yearly && 'text-muted-foreground')}>
             Monthly
@@ -250,7 +249,6 @@ export function Pricing() {
           </span>
         </Reveal>
 
-        {/* Pricing cards */}
         <Stagger className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:items-start">
           {plans.map((plan) => (
             <StaggerItem key={plan.name}>
@@ -276,7 +274,6 @@ export function Pricing() {
                 <h3 className="font-display text-xl font-semibold tracking-tight">{plan.name}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{plan.description}</p>
 
-                {/* Price */}
                 <div className="mt-5 flex h-12 items-end gap-1">
                   {plan.monthly !== null ? (
                     <>
@@ -302,7 +299,6 @@ export function Pricing() {
                   )}
                 </div>
 
-                {/* CTA */}
                 <Button
                   asChild
                   variant={plan.highlighted ? 'brand' : 'outline'}
@@ -315,7 +311,6 @@ export function Pricing() {
                   </Link>
                 </Button>
 
-                {/* Feature list */}
                 <ul className="mt-7 space-y-3 border-t border-border/60 pt-6">
                   {plan.features.map((f) => {
                     const Icon = featureIcons[f.key];
@@ -339,7 +334,6 @@ export function Pricing() {
           ))}
         </Stagger>
 
-        {/* Money-back guarantee trust badges */}
         <Reveal delay={0.2} className="mt-12">
           <div className="mx-auto flex max-w-3xl flex-col items-center justify-center gap-4 rounded-2xl border border-border/60 bg-card/40 px-6 py-5 shadow-soft backdrop-blur-sm sm:flex-row sm:gap-8">
             {trustBadges.map((badge) => (
@@ -353,7 +347,6 @@ export function Pricing() {
           </div>
         </Reveal>
 
-        {/* Comparison table */}
         <Reveal delay={0.15} className="mt-20">
           <SectionHeading
             align="center"
@@ -426,7 +419,6 @@ export function Pricing() {
           </div>
         </Reveal>
 
-        {/* Pricing FAQ */}
         <Reveal delay={0.15} className="mt-20">
           <SectionHeading
             align="center"
@@ -452,7 +444,6 @@ export function Pricing() {
           </Accordion>
         </Reveal>
 
-        {/* Enterprise CTA block */}
         <Reveal delay={0.2} className="mt-20">
           <div
             id="enterprise"
@@ -486,7 +477,6 @@ export function Pricing() {
           </div>
         </Reveal>
 
-        {/* Secondary trust indicators */}
         <Reveal delay={0.25} className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
           {['SOC 2 Type II', 'GDPR Ready', '99.9% Uptime SLA'].map((t) => (
             <div key={t} className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">

@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Container } from '@/components/container';
-import { trustedBy, heroThroughputBars } from '@/data/hero';
+import { trustedBy } from '@/data/hero';
 
 const notifications = [
   { icon: Bot, text: 'Agent resolved ticket #4821', color: 'text-emerald-500' },
@@ -31,7 +31,6 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 export function Hero() {
   return (
     <section className="relative overflow-hidden pt-28 pb-20 md:pt-36 md:pb-28">
-      {/* Animated background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 grid-bg mask-fade-b opacity-60" />
         <div className="absolute -top-40 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-gradient-to-br from-primary/30 via-secondary/20 to-accent/20 blur-[120px]" />
@@ -99,7 +98,6 @@ export function Hero() {
           No credit card required · 14-day free trial · Cancel anytime
         </motion.p>
 
-        {/* Dashboard mockup */}
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -108,7 +106,6 @@ export function Hero() {
         >
           <div aria-hidden className="absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/20 blur-2xl" />
           <div className="overflow-hidden rounded-2xl border border-border/60 bg-card/80 shadow-premium backdrop-blur-xl">
-            {/* Window bar */}
             <div className="flex items-center gap-2 border-b border-border/60 bg-muted/40 px-4 py-3">
               <span className="h-3 w-3 rounded-full bg-red-400/80" />
               <span className="h-3 w-3 rounded-full bg-amber-400/80" />
@@ -123,7 +120,6 @@ export function Hero() {
               </div>
             </div>
             <div className="grid grid-cols-12 gap-0">
-              {/* Sidebar */}
               <div className="hidden md:flex col-span-2 flex-col gap-1 border-r border-border/60 bg-muted/20 p-3">
                 {[
                   { icon: Activity, label: 'Dashboard', active: true },
@@ -135,9 +131,7 @@ export function Hero() {
                   <div
                     key={item.label}
                     className={`flex items-center gap-2 rounded-md px-2.5 py-2 text-xs font-medium ${
-                      item.active
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-muted-foreground'
+                      item.active ? 'bg-primary/10 text-primary' : 'text-muted-foreground'
                     }`}
                   >
                     <item.icon className="h-3.5 w-3.5" />
@@ -145,7 +139,6 @@ export function Hero() {
                   </div>
                 ))}
               </div>
-              {/* Main content */}
               <div className="col-span-12 md:col-span-10 p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -158,7 +151,6 @@ export function Hero() {
                   </div>
                 </div>
 
-                {/* Stat cards */}
                 <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-3">
                   {[
                     { label: 'Active Agents', value: '128', delta: '+12%', icon: Bot, color: 'text-primary' },
@@ -183,7 +175,6 @@ export function Hero() {
                   ))}
                 </div>
 
-                {/* Chart + feed */}
                 <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-3">
                   <div className="lg:col-span-2 rounded-xl border border-border/60 bg-background/60 p-4 shadow-soft">
                     <div className="flex items-center justify-between">
@@ -232,7 +223,6 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Floating cards */}
           <motion.div
             initial={{ opacity: 0, x: -20, y: 20 }}
             animate={{ opacity: 1, x: 0, y: 0 }}
@@ -284,7 +274,6 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* Animated notification card */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -295,7 +284,6 @@ export function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* Trusted by */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

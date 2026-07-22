@@ -1,47 +1,58 @@
 'use client';
 
-import { ArrowRight } from 'lucide-react';
+import {
+  Bot,
+  Zap,
+  Brain,
+  Plug,
+  BarChart3,
+  ShieldCheck,
+  type LucideIcon,
+} from 'lucide-react';
 import { Container } from '@/components/container';
-import { Stagger, StaggerItem } from '@/components/motion';
 import { SectionHeading } from '@/components/section-heading';
+import { Stagger, StaggerItem } from '@/components/motion';
 import { features } from '@/data/features';
+
+const iconMap: Record<string, LucideIcon> = {
+  Bot,
+  Zap,
+  Brain,
+  Plug,
+  BarChart3,
+  ShieldCheck,
+};
 
 export function Features() {
   return (
     <section id="features" className="relative py-24 sm:py-32">
       <Container>
         <SectionHeading
+          align="center"
           eyebrow="Features"
           title="Everything you need to automate with AI"
-          description="A complete platform that replaces a dozen disconnected tools — from agents and chatbots to analytics and integrations."
+          description="From autonomous agents to real-time analytics, Agentix gives your team the tools to build, deploy, and scale AI automation without a line of code."
         />
-        <Stagger className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => (
-            <StaggerItem key={feature.title}>
-              <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/50 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/30 hover:shadow-card-hover">
-                <div
-                  className={`pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gradient-to-br ${feature.gradient} to-transparent opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100`}
-                />
-                <div className="relative flex flex-1 flex-col">
-                  <div className="relative">
-                    <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} text-white shadow-glow ring-1 ring-white/10 transition-transform duration-300 group-hover:scale-110`}>
-                      <feature.icon className="h-6 w-6" />
-                    </div>
+
+        <Stagger className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {features.map((feature) => {
+            const Icon = iconMap[feature.icon] ?? Bot;
+            return (
+              <StaggerItem key={feature.title}>
+                <div className="group relative h-full rounded-2xl border border-border/60 bg-card/50 p-6 shadow-soft backdrop-blur-sm transition-all hover:border-primary/40 hover:shadow-premium">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
+                    <Icon className="h-6 w-6" />
                   </div>
                   <h3 className="mt-5 font-display text-lg font-semibold tracking-tight">
                     {feature.title}
                   </h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
                     {feature.description}
                   </p>
-                  <div className="mt-4 flex items-center gap-1 text-sm font-medium text-primary opacity-0 transition-all duration-300 group-hover:opacity-100">
-                    Learn more
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                  </div>
                 </div>
-              </div>
-            </StaggerItem>
-          ))}
+              </StaggerItem>
+            );
+          })}
         </Stagger>
       </Container>
     </section>

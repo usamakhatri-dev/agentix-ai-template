@@ -35,7 +35,7 @@ export function Header() {
         'fixed inset-x-0 top-0 z-50 transition-all duration-300',
         scrolled
           ? 'border-b border-border/60 bg-background/80 backdrop-blur-xl shadow-soft'
-          : 'bg-transparent'
+          : 'bg-transparent',
       )}
     >
       <Container className="flex h-16 items-center justify-between gap-4 md:h-18">
