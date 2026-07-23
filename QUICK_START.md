@@ -53,12 +53,13 @@ npm start
 
 ```
 agentix-ai/
-├── app/            Next.js App Router — layout, page, metadata, routes
+├── app/              Next.js App Router — layout, page, metadata, routes
 ├── components/
-│   ├── sections/    15 page section components (Header, Hero, Pricing, etc.)
-│   └── ui/          Reusable UI primitives (Button, Input, Accordion, etc.)
-├── data/            Typed content files — edit these to change text and data
-├── lib/             Utility functions
+│   ├── sections/      15 page section components (Header, Hero, Pricing, etc.)
+│   └── ui/            Reusable UI primitives (Button, Input, Accordion, etc.)
+├── data/             Typed content files — edit these to change text and data
+├── lib/               Utility functions
+├── public/            Static assets
 ├── tailwind.config.ts
 ├── next.config.ts
 └── package.json
@@ -149,12 +150,11 @@ To enable image optimization on Vercel, remove `images: { unoptimized: true }` f
 
 1. Push your project to a Git repository
 2. Import the repository at [app.netlify.com](https://app.netlify.com)
-3. Set build command to `npm run build`
-4. Set publish directory to `.next`
-5. Click **Deploy**
+3. The included `netlify.toml` pre-configures the build command and publish directory
+4. Click **Deploy**
 
 ---
 
 ## Need Help?
 
-See **SUPPORT.md** for support channels, issue reporting guidelines, and support scope.
+See **DOCUMENTATION.md** for the full reference guide, or open an issue on the repository with a clear description of your problem.
